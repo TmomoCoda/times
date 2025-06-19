@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Times-Table Quest</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="hero" role="banner">
+  <h1>Times-Table Quest</h1>
+  <button id="contrastToggle" aria-label="Toggle high contrast" role="switch">HC</button>
+</header>
+<main>
+  <section class="mode-selector" aria-label="Select Mode" role="navigation">
+    <button class="mode" data-mode="1" aria-label="Explore">Explore</button>
+    <button class="mode" data-mode="2" aria-label="Sequence Drill">Sequence Drill</button>
+    <button class="mode" data-mode="3" aria-label="Mixed Drill">Mixed Drill</button>
+    <button class="mode" data-mode="4" aria-label="Multiple Choice">Multiple Choice</button>
+    <button class="mode" data-mode="5" aria-label="Speed Test">Speed Test</button>
+  </section>
+  <section id="hud" aria-label="Progress HUD" role="status">
+    <div id="xpBar" aria-label="Experience">0 XP</div>
+    <div id="streak" aria-label="Answer streak">Streak: 0</div>
+    <div id="timer" aria-label="Timer"></div>
+  </section>
+  <section id="game" aria-label="Quiz area" role="region">
+    <div id="flashcard" tabindex="0" aria-label="Question card" role="button"></div>
+    <input id="answer" type="text" aria-label="Your answer"/>
+    <button id="submit" aria-label="Submit answer" role="button">Submit</button>
+  </section>
+</main>
+<footer>
+  <button id="trophyBtn" aria-label="Open trophy cabinet" role="button">Trophies</button>
+</footer>
+<div id="toast" aria-live="assertive" role="alert"></div>
+<div id="trophyModal" aria-label="Trophy cabinet" role="dialog" hidden>
+  <div class="modal-content">
+    <h2>Your Trophies</h2>
+    <ul id="trophies"></ul>
+    <button id="closeTrophies" aria-label="Close" role="button">Close</button>
+  </div>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+<script>
+// Basic state
+let mode = 0;
+let streak = 0;
+let xp = 0;
+let lastQuestions = [];
+let trophies = new Set();
+const factors = Array.from({length:12}, (_,i)=>i+1);
+
+const contrastToggle = document.getElementById('contrastToggle');
+contrastToggle.addEventListener('click',()=>document.body.classList.toggle('high-contrast'));
+
+const modes = document.querySelectorAll('.mode');
+const flashcard = document.getElementById('flashcard');
+const answer = document.getElementById('answer');
+const submitBtn = document.getElementById('submit');
+const toastBox = document.getElementById('toast');
+const xpBar = document.getElementById('xpBar');
+const streakEl = document.getElementById('streak');
+const timerEl = document.getElementById('timer');
+
+modes.forEach(btn=>btn.addEventListener('click',()=>startMode(Number(btn.dataset.mode))));
+submitBtn.addEventListener('click', submitAnswer);
+answer.addEventListener('keyup', e=>{if(e.key==='Enter') submitAnswer();});
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') nextCard();
+  if(e.key==='ArrowLeft') prevCard();
+});
+
+function startMode(m){
+  mode = m; streak = 0; xp = 0; updateHud();
+  if(mode===5) startTimer(60);
+  nextQuestion();
+}
+function randomFactor(){
+  let q;
+  do { q=[rand(),rand()]; } while(lastQuestions.some(p=>p[0]==q[0]&&p[1]==q[1]));
+  lastQuestions.push(q);
+  if(lastQuestions.length>5) lastQuestions.shift();
+  return q;
+}
+function rand(){return factors[Math.floor(Math.random()*factors.length)];}
+let currentQ;
+function nextQuestion(){
+  currentQ = randomFactor();
+  flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;
+  answer.value='';
+}
+function submitAnswer(){
+  const val = Number(answer.value);
+  if(val === currentQ[0]*currentQ[1]){
+    toast('Correct','success');
+    streak++; xp+=10; if(streak%5===0){xp+=5; celebrate();}
+  }else{toast('Try again','error'); streak=0;}
+  updateHud();
+  if(mode===5 && xp>=90*2){addTrophy('speedster');}
+  nextQuestion();
+}
+function updateHud(){
+  xpBar.textContent=`XP: ${xp}`;
+  streakEl.textContent=`Streak: ${streak}`;
+}
+function toast(msg,type){
+  toastBox.textContent=msg;
+  toastBox.className='show '+type;
+  setTimeout(()=>toastBox.className='',1500);
+}
+function celebrate(){
+  const c=document.getElementById('confetti');
+  const ctx=c.getContext('2d');
+  c.width=window.innerWidth;
+  c.height=window.innerHeight;
+  for(let i=0;i<100;i++){
+    ctx.fillStyle=`hsl(${Math.random()*360},70%,60%)`;
+    ctx.fillRect(Math.random()*c.width, Math.random()*c.height,4,4);
+  }
+  setTimeout(()=>ctx.clearRect(0,0,c.width,c.height),500);
+}
+function startTimer(sec){
+  timerEl.textContent=`Time: ${sec}`;
+  const iv=setInterval(()=>{
+    sec--; timerEl.textContent=`Time: ${sec}`;
+    if(sec<=0){clearInterval(iv);toast('Time!','hint');addTrophy('speedster');}
+  },1000);
+}
+function addTrophy(name){
+  if(!trophies.has(name)){
+    trophies.add(name);
+    document.getElementById('trophies').innerHTML+='<li>'+name+'</li>';
+  }
+}
+document.getElementById('trophyBtn').addEventListener('click',()=>{
+  document.getElementById('trophyModal').hidden=false;
+});
+document.getElementById('closeTrophies').addEventListener('click',()=>{
+  document.getElementById('trophyModal').hidden=true;
+});
+function nextCard(){/* placeholder */}
+function prevCard(){/* placeholder */}
+</script>
+</body>
+</html>
