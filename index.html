@@ -4,143 +4,141 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Times-Table Quest</title>
-<link rel="stylesheet" href="style.css">
+<link rel="preconnect" href="https://fonts.gstatic.com">
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fff;
+  --fg:#222;
+  --accent:#0068c9;
+  --hc-bg:#000;
+  --hc-fg:#ffd800;
+  --hc-accent:#ff9800;
+  font-family:'Fira Sans',sans-serif;
+  font-size:16px;
+}
+body{margin:0;background:var(--bg);color:var(--fg);display:flex;flex-direction:column;min-height:100vh;transition:background .3s,color .3s;}
+.high-contrast{--bg:var(--hc-bg);--fg:var(--hc-fg);--accent:var(--hc-accent);}
+button,input{font:inherit;}
+button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
+header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;background:var(--accent);color:#fff;}
+.mode-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;padding:.5rem;}
+.mode-selector button{background:var(--accent);border:none;border-radius:.25rem;padding:.5rem 1rem;cursor:pointer;color:#fff;}
+.container{display:flex;flex-grow:1;}
+#hud{display:flex;flex-direction:column;gap:.5rem;padding:.5rem;width:100px;}
+#xpBar{height:.5rem;background:#ccc;width:100%;border-radius:.25rem;overflow:hidden;}
+#xpBar span{display:block;height:100%;background:var(--accent);width:0%;transition:width .3s;}
+main{display:flex;flex-direction:column;align-items:center;justify-content:center;flex-grow:1;gap:.5rem;padding:1rem;}
+#flashcard{font-size:clamp(1.5rem,5vw,2.5rem);padding:1rem 2rem;border:2px solid var(--accent);border-radius:.5rem;min-width:150px;text-align:center;}
+#choices{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
+#choices button{background:var(--accent);color:#fff;border:none;border-radius:.25rem;padding:.5rem 1rem;cursor:pointer;}
+#toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);padding:.5rem 1rem;border-radius:.5rem;opacity:0;pointer-events:none;}
+#toast.show{animation:toast-in .3s forwards,toast-out .3s forwards 2s;}
+@keyframes toast-in{from{opacity:0;transform:translate(-50%,100%);}to{opacity:1;transform:translate(-50%,0);}}
+@keyframes toast-out{to{opacity:0;transform:translate(-50%,100%);}}
+#confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;}
+.particle{position:absolute;animation:fall linear forwards;}
+@keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0;}}
+#trophyModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
+#trophyModal[hidden]{display:none;}
+.modal-content{background:var(--bg);color:var(--fg);padding:1rem;border-radius:.5rem;width:90%;max-width:300px;text-align:center;}
+.modal-content ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
+.modal-content li{background:var(--accent);color:var(--bg);padding:.25rem .5rem;border-radius:.25rem;}
+footer{text-align:center;padding:.5rem;}
+</style>
 </head>
 <body>
-<header class="hero" role="banner">
+<header>
   <h1>Times-Table Quest</h1>
-  <button id="contrastToggle" aria-label="Toggle high contrast" role="switch">HC</button>
+  <button id="contrastToggle" role="switch" aria-checked="false">HC</button>
 </header>
-<main>
-  <section class="mode-selector" aria-label="Select Mode" role="navigation">
-    <button class="mode" data-mode="1" aria-label="Explore">Explore</button>
-    <button class="mode" data-mode="2" aria-label="Sequence Drill">Sequence Drill</button>
-    <button class="mode" data-mode="3" aria-label="Mixed Drill">Mixed Drill</button>
-    <button class="mode" data-mode="4" aria-label="Multiple Choice">Multiple Choice</button>
-    <button class="mode" data-mode="5" aria-label="Speed Test">Speed Test</button>
-  </section>
-  <section id="hud" aria-label="Progress HUD" role="status">
-    <div id="xpBar" aria-label="Experience">0 XP</div>
-    <div id="streak" aria-label="Answer streak">Streak: 0</div>
-    <div id="timer" aria-label="Timer"></div>
-  </section>
-  <section id="game" aria-label="Quiz area" role="region">
-    <div id="flashcard" tabindex="0" aria-label="Question card" role="button"></div>
-    <input id="answer" type="text" aria-label="Your answer"/>
-    <button id="submit" aria-label="Submit answer" role="button">Submit</button>
-  </section>
-</main>
-<footer>
-  <button id="trophyBtn" aria-label="Open trophy cabinet" role="button">Trophies</button>
-</footer>
-<div id="toast" aria-live="assertive" role="alert"></div>
-<div id="trophyModal" aria-label="Trophy cabinet" role="dialog" hidden>
+<nav class="mode-selector">
+  <button data-mode="explore">Explore</button>
+  <button data-mode="sequence">Sequence Drill</button>
+  <button data-mode="mixed">Mixed Drill</button>
+  <button data-mode="choice">Multiple Choice</button>
+  <button data-mode="speed">Speed Test</button>
+</nav>
+<div class="container">
+  <aside id="hud">
+    <div id="xpBar"><span></span></div>
+    <div id="xpText" role="status">XP: 0</div>
+    <div id="streak" role="status">Streak: 0</div>
+    <div id="timer" role="status"></div>
+  </aside>
+  <main id="game">
+    <div id="flashcard" tabindex="0"></div>
+    <div id="choices" hidden></div>
+    <input id="answer" type="number" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Your answer">
+    <button id="submit">Submit</button>
+  </main>
+</div>
+<footer><button id="trophyBtn">Trophies</button></footer>
+<div id="trophyModal" hidden>
   <div class="modal-content">
     <h2>Your Trophies</h2>
     <ul id="trophies"></ul>
-    <button id="closeTrophies" aria-label="Close" role="button">Close</button>
+    <button id="closeTrophies">Close</button>
   </div>
 </div>
-<canvas id="confetti" aria-hidden="true"></canvas>
-<script>
-// Basic state
-let mode = 0;
-let streak = 0;
-let xp = 0;
-let lastQuestions = [];
-let trophies = new Set();
-const factors = Array.from({length:12}, (_,i)=>i+1);
-
-const contrastToggle = document.getElementById('contrastToggle');
-contrastToggle.addEventListener('click',()=>document.body.classList.toggle('high-contrast'));
-
-const modes = document.querySelectorAll('.mode');
-const flashcard = document.getElementById('flashcard');
-const answer = document.getElementById('answer');
-const submitBtn = document.getElementById('submit');
-const toastBox = document.getElementById('toast');
-const xpBar = document.getElementById('xpBar');
-const streakEl = document.getElementById('streak');
-const timerEl = document.getElementById('timer');
-
-modes.forEach(btn=>btn.addEventListener('click',()=>startMode(Number(btn.dataset.mode))));
-submitBtn.addEventListener('click', submitAnswer);
-answer.addEventListener('keyup', e=>{if(e.key==='Enter') submitAnswer();});
-document.addEventListener('keydown', e=>{
-  if(e.key==='ArrowRight') nextCard();
-  if(e.key==='ArrowLeft') prevCard();
-});
-
-function startMode(m){
-  mode = m; streak = 0; xp = 0; updateHud();
-  if(mode===5) startTimer(60);
-  nextQuestion();
-}
-function randomFactor(){
-  let q;
-  do { q=[rand(),rand()]; } while(lastQuestions.some(p=>p[0]==q[0]&&p[1]==q[1]));
-  lastQuestions.push(q);
-  if(lastQuestions.length>5) lastQuestions.shift();
-  return q;
-}
-function rand(){return factors[Math.floor(Math.random()*factors.length)];}
-let currentQ;
-function nextQuestion(){
-  currentQ = randomFactor();
-  flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;
-  answer.value='';
-}
-function submitAnswer(){
-  const val = Number(answer.value);
-  if(val === currentQ[0]*currentQ[1]){
-    toast('Correct','success');
-    streak++; xp+=10; if(streak%5===0){xp+=5; celebrate();}
-  }else{toast('Try again','error'); streak=0;}
-  updateHud();
-  if(mode===5 && xp>=90*2){addTrophy('speedster');}
-  nextQuestion();
-}
-function updateHud(){
-  xpBar.textContent=`XP: ${xp}`;
-  streakEl.textContent=`Streak: ${streak}`;
-}
-function toast(msg,type){
-  toastBox.textContent=msg;
-  toastBox.className='show '+type;
-  setTimeout(()=>toastBox.className='',1500);
-}
-function celebrate(){
-  const c=document.getElementById('confetti');
-  const ctx=c.getContext('2d');
-  c.width=window.innerWidth;
-  c.height=window.innerHeight;
-  for(let i=0;i<100;i++){
-    ctx.fillStyle=`hsl(${Math.random()*360},70%,60%)`;
-    ctx.fillRect(Math.random()*c.width, Math.random()*c.height,4,4);
-  }
-  setTimeout(()=>ctx.clearRect(0,0,c.width,c.height),500);
-}
-function startTimer(sec){
-  timerEl.textContent=`Time: ${sec}`;
-  const iv=setInterval(()=>{
-    sec--; timerEl.textContent=`Time: ${sec}`;
-    if(sec<=0){clearInterval(iv);toast('Time!','hint');addTrophy('speedster');}
-  },1000);
-}
-function addTrophy(name){
-  if(!trophies.has(name)){
-    trophies.add(name);
-    document.getElementById('trophies').innerHTML+='<li>'+name+'</li>';
-  }
-}
-document.getElementById('trophyBtn').addEventListener('click',()=>{
-  document.getElementById('trophyModal').hidden=false;
-});
-document.getElementById('closeTrophies').addEventListener('click',()=>{
-  document.getElementById('trophyModal').hidden=true;
-});
-function nextCard(){/* placeholder */}
-function prevCard(){/* placeholder */}
+<div id="toast" aria-live="polite"></div>
+<div id="confetti"></div>
+<audio id="snd-correct" src="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAoA8AAKAPAAABAAgAZGF0YZABAAAAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KE=" preload="auto"></audio>
+<audio id="snd-wrong" src="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAoA8AAKAPAAABAAgAZGF0YZABAAAAPm1+b0IDxZWCj7v5N2l+ckkLzJqCjLTxMGR9dk8T1J+Dia7pKV98eFUb26SFh6jhIVl6e1sj46qHhaPZGVN4fGAr67CKg53SEU11fWUy87aNgpnKCUdyfmo5+7yQgpTDAUBuf25AAcOUgpC8+zlqfnJHCcqZgo228zJlfXVNEdKdg4qw6ytgfHhTGdmjhYeq4yNbe3pZIeGoh4Wk2xtVeHxfKemuiYOf1BNPdn1kMPG0jIKazAtJcn5pN/m7j4KVxQNDb35tPgDCk4KRvv07a35xRQfJl4KOt/U0Zn50TA/QnIOKse0sYX13UhfXoYSIq+UlXHt5WB/fp4aFpd0dVnl7XSfnrYiEoNUVUHZ9Yy7vs4uDm84NSnN+Zzb3uY6ClscFRHB+bD3/wJKBksD/PWx+cEQFx5aCjrn3Nmd+c0oNzpuDi7PvLmN9dlAV1aCEiK3nJ117eVYd3aWFhqffH1h5e1wl5auIhKHXF1J3fWEs7bGKg5zQD0x0fmY09beOgpfJB0Vxfms7/b6RgpPC" preload="auto"></audio>
+<script type="module">
+(()=>{
+  'use strict';
+  const MAX_FACTOR=12,STREAK_BONUS=5,MAX_HISTORY=5,MAX_XP=5000,SPEED_TIME=60,CONFETTI_COUNT=30,STORAGE_KEY='ttq-state';
+  const state={xp:0,streak:0,trophies:[],theme:'default'};
+  const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
+  const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+  const saveState=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+  const loadState=()=>{Object.assign(state,JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'));};
+  const flashcard=document.getElementById('flashcard');
+  const answer=document.getElementById('answer');
+  const submit=document.getElementById('submit');
+  const xpText=document.getElementById('xpText');
+  const xpBar=document.querySelector('#xpBar span');
+  const streakEl=document.getElementById('streak');
+  const timerEl=document.getElementById('timer');
+  const toastEl=document.getElementById('toast');
+  const confettiBox=document.getElementById('confetti');
+  const trophyBtn=document.getElementById('trophyBtn');
+  const trophyModal=document.getElementById('trophyModal');
+  const trophiesList=document.getElementById('trophies');
+  const closeTrophies=document.getElementById('closeTrophies');
+  const contrastToggle=document.getElementById('contrastToggle');
+  const choicesEl=document.getElementById('choices');
+  const modes=document.querySelectorAll('.mode-selector button');
+  const sndCorrect=document.getElementById('snd-correct');
+  const sndWrong=document.getElementById('snd-wrong');
+  let history=[],mode='explore',seqFactor=2,seqIndex=1,exploreIndex=0,currentQ=[1,1],timerId=0,startXP=0;
+  const updateHud=()=>{xpText.textContent=`XP: ${state.xp}`;xpBar.style.width=`${state.xp%100}%`;streakEl.textContent=`Streak: ${state.streak}`;};
+  const showToast=msg=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches){toastEl.textContent=msg;toastEl.style.opacity=1;setTimeout(()=>toastEl.style.opacity=0,2000);}else{toastEl.textContent=msg;toastEl.className='show';setTimeout(()=>toastEl.className='',2300);}};
+  const showConfetti=()=>{confettiBox.innerHTML='';const emojis=['🎉','✨','🍀'];for(let i=0;i<CONFETTI_COUNT;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=Math.random()*100+'%';s.style.animationDuration=2+Math.random()+'s';confettiBox.appendChild(s);}setTimeout(()=>confettiBox.innerHTML='',3000);};
+  const rebuildTrophies=()=>{trophiesList.innerHTML='';state.trophies.sort((a,b)=>a.time-b.time).forEach(t=>{const li=document.createElement('li');li.textContent=`${t.icon} ${t.name}`;trophiesList.appendChild(li);});};
+  const addTrophy=(name,icon)=>{if(!state.trophies.some(t=>t.name===name)){state.trophies.push({name,icon,time:Date.now()});rebuildTrophies();saveState();}};
+  const uniqueRandom=()=>{let q;do{q=[rand(1,MAX_FACTOR),rand(1,MAX_FACTOR)];}while(history.some(p=>p.includes(q[0])&&p.includes(q[1])));history.push(q);if(history.length>MAX_HISTORY)history.shift();return q;};
+  const stopTimer=()=>{clearInterval(timerId);timerId=0;timerEl.textContent='';};
+  const startTimer=sec=>{timerEl.textContent=`${sec}s`;timerId=setInterval(()=>{sec--;timerEl.textContent=`${sec}s`;if(sec<=0){stopTimer();endSpeedTest();}},1000);};
+  const endSpeedTest=()=>{showToast(`Time! +${state.xp-startXP} XP`);addTrophy('Speedster','⚡');startMode('speed');};
+  const nextExplore=()=>{const a=Math.floor(exploreIndex/MAX_FACTOR)+1,b=exploreIndex%MAX_FACTOR+1;flashcard.textContent=`${a} × ${b} = ${a*b}`;exploreIndex=(exploreIndex+1)%(MAX_FACTOR*MAX_FACTOR);};
+  const nextSequence=()=>{if(seqIndex>MAX_FACTOR)seqIndex=1;currentQ=[seqFactor,seqIndex];flashcard.textContent=`${seqFactor} × ${seqIndex} = ?`;seqIndex++;answer.focus();};
+  const nextRandom=()=>{currentQ=uniqueRandom();flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;answer.focus();};
+  const nextChoice=()=>{currentQ=uniqueRandom();const correct=currentQ[0]*currentQ[1];flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;const set=new Set([correct]);while(set.size<4)set.add(rand(1,MAX_FACTOR)*rand(1,MAX_FACTOR));const opts=[...set].sort(()=>Math.random()-0.5);choicesEl.innerHTML='';opts.forEach(v=>{const b=document.createElement('button');b.textContent=v;b.addEventListener('click',()=>checkAnswer(v));choicesEl.appendChild(b);});};
+  const checkAnswer=v=>{const correct=currentQ[0]*currentQ[1];if(v===correct){sndCorrect.currentTime=0;sndCorrect.play();state.streak++;let add=10;if(state.streak%STREAK_BONUS===0){add+=STREAK_BONUS;showConfetti();}state.xp=clamp(state.xp+add,0,MAX_XP);showToast('Correct!');}else{sndWrong.currentTime=0;sndWrong.play();state.streak=0;showToast('Try again');}saveState();updateHud();if(mode==='sequence')nextSequence();else if(mode==='mixed'||mode==='speed')nextRandom();else if(mode==='choice')nextChoice();};
+  const handleSubmit=()=>{const v=Number(answer.value);if(Number.isNaN(v)){showToast('Please enter a number');return;}answer.value='';checkAnswer(v);};
+  const startMode=m=>{stopTimer();mode=m;history=[];answer.value='';answer.disabled=false;submit.disabled=false;choicesEl.hidden=true;if(mode==='explore'){answer.disabled=true;submit.disabled=true;nextExplore();}else if(mode==='sequence'){seqFactor=clamp(parseInt(prompt('Choose a factor 2–12')||'2',10),2,MAX_FACTOR);seqIndex=1;nextSequence();}else if(mode==='mixed'){nextRandom();}else if(mode==='choice'){answer.disabled=true;submit.disabled=true;choicesEl.hidden=false;nextChoice();}else if(mode==='speed'){startXP=state.xp;startTimer(SPEED_TIME);nextRandom();}};
+  const applyTheme=h=>{document.documentElement.classList.toggle('high-contrast',h);contrastToggle.setAttribute('aria-checked',h);state.theme=h?'high':'default';saveState();};
+  loadState();applyTheme(state.theme==='high');updateHud();rebuildTrophies();startMode('explore');
+  modes.forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
+  contrastToggle.addEventListener('click',()=>applyTheme(!document.documentElement.classList.contains('high-contrast')));
+  answer.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();if(!/\d/.test(e.key)&&e.key.length===1)e.preventDefault();});
+  submit.addEventListener('click',handleSubmit);
+  trophyBtn.addEventListener('click',()=>trophyModal.hidden=false);
+  closeTrophies.addEventListener('click',()=>trophyModal.hidden=true);
+  document.addEventListener('keydown',e=>{if(mode==='explore'){if(e.key==='ArrowRight')nextExplore();if(e.key==='ArrowLeft')exploreIndex=(exploreIndex+MAX_FACTOR*MAX_FACTOR-2)%(MAX_FACTOR*MAX_FACTOR);}});
+})();
 </script>
 </body>
 </html>
