@@ -45,10 +45,16 @@ main{display:flex;flex-direction:column;align-items:center;justify-content:cente
 #trophyModal[hidden]{display:none;}
 #avatarModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
 #avatarModal[hidden]{display:none;}
+#leaderboardModal,#lessonModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
+#leaderboardModal[hidden],#lessonModal[hidden]{display:none;}
 .modal-content{background:var(--bg);color:var(--fg);padding:1rem;border-radius:.5rem;width:90%;max-width:300px;text-align:center;}
 .modal-content ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
 .modal-content li{background:var(--accent);color:var(--bg);padding:.25rem .5rem;border-radius:.25rem;}
+#leaderboard{list-style:none;padding:0;}
+#leaderboard li{background:var(--accent);color:var(--bg);margin:.25rem 0;padding:.25rem .5rem;border-radius:.25rem;}
 #avatarModal button{font-size:2rem;background:none;border:none;cursor:pointer;}
+#lessonList{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
+#lessonList button.done{opacity:.5;}
 footer{text-align:center;padding:.5rem;}
 </style>
 <script type="application/ld+json">
@@ -76,6 +82,7 @@ footer{text-align:center;padding:.5rem;}
   <button data-mode="mixed">Mixed Drill</button>
   <button data-mode="choice">Multiple Choice</button>
   <button data-mode="speed">Speed Test</button>
+  <button id="lessonBtn">Lessons</button>
 </nav>
 <div class="container">
   <aside id="hud">
@@ -93,6 +100,7 @@ footer{text-align:center;padding:.5rem;}
 </div>
 <footer>
   <button id="trophyBtn">Trophies</button>
+  <button id="boardBtn">Leaderboard</button>
   <button id="avatarBtn">Avatar</button>
 </footer>
 <div id="trophyModal" hidden>
@@ -109,6 +117,20 @@ footer{text-align:center;padding:.5rem;}
     <button id="closeAvatar">Close</button>
   </div>
 </div>
+<div id="leaderboardModal" hidden>
+  <div class="modal-content">
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard"></ol>
+    <button id="closeBoard">Close</button>
+  </div>
+</div>
+<div id="lessonModal" hidden>
+  <div class="modal-content">
+    <h2>Lessons</h2>
+    <div id="lessonList"></div>
+    <button id="closeLessons">Close</button>
+  </div>
+</div>
 <div id="toast" aria-live="polite"></div>
 <div id="confetti"></div>
 <audio id="snd-correct" src="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAoA8AAKAPAAABAAgAZGF0YZABAAAAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KE=" preload="auto"></audio>
@@ -116,12 +138,12 @@ footer{text-align:center;padding:.5rem;}
 <script type="module">
 (()=>{
   'use strict';
-  const MAX_FACTOR=12,STREAK_BONUS=5,MAX_HISTORY=5,MAX_XP=5000,SPEED_TIME=60,CONFETTI_COUNT=30,STORAGE_KEY='ttq-state';
-  const state={xp:0,streak:0,trophies:[],theme:'default',avatar:'\uD83D\uDE42'}; // 🙂
+  const MAX_FACTOR=12,STREAK_BONUS=5,MAX_HISTORY=5,MAX_XP=5000,SPEED_TIME=60,CONFETTI_COUNT=30,STORAGE_KEY='ttq-state',BOARD_KEY='ttq-board';
+  const state={xp:0,streak:0,trophies:[],theme:'default',avatar:'\uD83D\uDE42',modules:{},}; // 🙂
   const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
   const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
   const saveState=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  const loadState=()=>{Object.assign(state,JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'));};
+  const loadState=()=>{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');Object.assign(state,s);state.modules=state.modules||{};};
   const flashcard=document.getElementById('flashcard');
   const answer=document.getElementById('answer');
   const submit=document.getElementById('submit');
@@ -140,6 +162,14 @@ footer{text-align:center;padding:.5rem;}
   const avatarModal=document.getElementById('avatarModal');
   const avatarOptions=document.getElementById('avatarOptions');
   const closeAvatar=document.getElementById('closeAvatar');
+  const boardBtn=document.getElementById('boardBtn');
+  const boardModal=document.getElementById('leaderboardModal');
+  const boardList=document.getElementById('leaderboard');
+  const closeBoard=document.getElementById('closeBoard');
+  const lessonBtn=document.getElementById('lessonBtn');
+  const lessonModal=document.getElementById('lessonModal');
+  const lessonList=document.getElementById('lessonList');
+  const closeLessons=document.getElementById('closeLessons');
   const contrastToggle=document.getElementById('contrastToggle');
   const choicesEl=document.getElementById('choices');
   const modes=document.querySelectorAll('.mode-selector button');
@@ -162,19 +192,26 @@ footer{text-align:center;padding:.5rem;}
   const showConfetti=()=>{confettiBox.innerHTML='';const emojis=['🎉','✨','🍀'];for(let i=0;i<CONFETTI_COUNT;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=Math.random()*100+'%';s.style.animationDuration=2+Math.random()+'s';confettiBox.appendChild(s);}setTimeout(()=>confettiBox.innerHTML='',3000);};
   const rebuildTrophies=()=>{trophiesList.innerHTML='';state.trophies.sort((a,b)=>a.time-b.time).forEach(t=>{const li=document.createElement('li');li.textContent=`${t.icon} ${t.name}`;trophiesList.appendChild(li);});};
   const addTrophy=(name,icon)=>{if(!state.trophies.some(t=>t.name===name)){state.trophies.push({name,icon,time:Date.now()});rebuildTrophies();saveState();}};
+  const loadBoard=()=>JSON.parse(localStorage.getItem(BOARD_KEY)||'[]');
+  const saveBoard=b=>localStorage.setItem(BOARD_KEY,JSON.stringify(b));
+  const buildBoard=()=>{const b=loadBoard();boardList.innerHTML='';b.forEach((r,i)=>{const li=document.createElement('li');li.textContent=`${i+1}. ${r.name} - ${r.score}`;boardList.appendChild(li);});};
+  const updateBoard=score=>{let b=loadBoard();b.push({name:state.avatar,score});b.sort((a,c)=>c.score-a.score);b=b.slice(0,10);saveBoard(b);};
+  const buildLessons=()=>{lessonList.innerHTML='';for(let f=2;f<=MAX_FACTOR;f++){const b=document.createElement('button');b.textContent=`×${f}`;if(state.modules[f])b.classList.add('done');b.addEventListener('click',()=>startLesson(f));lessonList.appendChild(b);}};
+  const startLesson=f=>{lessonModal.hidden=true;mode='lesson';seqFactor=f;seqIndex=1;history=[];nextSequence();};
+  const endLesson=()=>{state.modules[seqFactor]=true;addTrophy(`Master ×${seqFactor}`,'🏅');saveState();buildLessons();startMode('explore');};
   const uniqueRandom=()=>{let q;do{q=[rand(1,MAX_FACTOR),rand(1,MAX_FACTOR)];}while(history.some(p=>p.includes(q[0])&&p.includes(q[1])));history.push(q);if(history.length>MAX_HISTORY)history.shift();return q;};
   const stopTimer=()=>{clearInterval(timerId);timerId=0;timerEl.textContent='';};
   const startTimer=sec=>{timerEl.textContent=`${sec}s`;timerId=setInterval(()=>{sec--;timerEl.textContent=`${sec}s`;if(sec<=0){stopTimer();endSpeedTest();}},1000);};
-  const endSpeedTest=()=>{showToast(`Time! +${state.xp-startXP} XP`);addTrophy('Speedster','⚡');startMode('speed');};
+  const endSpeedTest=()=>{const gained=state.xp-startXP;showToast(`Time! +${gained} XP`);updateBoard(gained);buildBoard();addTrophy('Speedster','⚡');startMode('speed');};
   const nextExplore=()=>{const a=Math.floor(exploreIndex/MAX_FACTOR)+1,b=exploreIndex%MAX_FACTOR+1;flashcard.textContent=`${a} × ${b} = ${a*b}`;exploreIndex=(exploreIndex+1)%(MAX_FACTOR*MAX_FACTOR);};
-  const nextSequence=()=>{if(seqIndex>MAX_FACTOR)seqIndex=1;currentQ=[seqFactor,seqIndex];flashcard.textContent=`${seqFactor} × ${seqIndex} = ?`;seqIndex++;answer.focus();};
+  const nextSequence=()=>{if(seqIndex>MAX_FACTOR){if(mode==='lesson'){endLesson();return;}seqIndex=1;}currentQ=[seqFactor,seqIndex];flashcard.textContent=`${seqFactor} × ${seqIndex} = ?`;seqIndex++;answer.focus();};
   const nextRandom=()=>{currentQ=uniqueRandom();flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;answer.focus();};
   const nextChoice=()=>{currentQ=uniqueRandom();const correct=currentQ[0]*currentQ[1];flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;const set=new Set([correct]);while(set.size<4)set.add(rand(1,MAX_FACTOR)*rand(1,MAX_FACTOR));const opts=[...set].sort(()=>Math.random()-0.5);choicesEl.innerHTML='';opts.forEach(v=>{const b=document.createElement('button');b.textContent=v;b.addEventListener('click',()=>checkAnswer(v));choicesEl.appendChild(b);});};
-  const checkAnswer=v=>{const correct=currentQ[0]*currentQ[1];if(v===correct){sndCorrect.currentTime=0;sndCorrect.play();state.streak++;let add=10;if(state.streak%STREAK_BONUS===0){add+=STREAK_BONUS;showConfetti();}state.xp=clamp(state.xp+add,0,MAX_XP);showToast('Correct!');}else{sndWrong.currentTime=0;sndWrong.play();state.streak=0;showToast('Try again');}saveState();updateHud();if(mode==='sequence')nextSequence();else if(mode==='mixed'||mode==='speed')nextRandom();else if(mode==='choice')nextChoice();};
+  const checkAnswer=v=>{const correct=currentQ[0]*currentQ[1];if(v===correct){sndCorrect.currentTime=0;sndCorrect.play();state.streak++;let add=10;if(state.streak%STREAK_BONUS===0){add+=STREAK_BONUS;showConfetti();}state.xp=clamp(state.xp+add,0,MAX_XP);showToast('Correct!');}else{sndWrong.currentTime=0;sndWrong.play();state.streak=0;showToast('Try again');}saveState();updateHud();if(mode==='sequence'||mode==='lesson')nextSequence();else if(mode==='mixed'||mode==='speed')nextRandom();else if(mode==='choice')nextChoice();};
   const handleSubmit=()=>{const v=Number(answer.value);if(Number.isNaN(v)){showToast('Please enter a number');return;}answer.value='';checkAnswer(v);};
   const startMode=m=>{stopTimer();mode=m;history=[];answer.value='';answer.disabled=false;submit.disabled=false;choicesEl.hidden=true;if(mode==='explore'){answer.disabled=true;submit.disabled=true;nextExplore();}else if(mode==='sequence'){seqFactor=clamp(parseInt(prompt('Choose a factor 2–12')||'2',10),2,MAX_FACTOR);seqIndex=1;nextSequence();}else if(mode==='mixed'){nextRandom();}else if(mode==='choice'){answer.disabled=true;submit.disabled=true;choicesEl.hidden=false;nextChoice();}else if(mode==='speed'){startXP=state.xp;startTimer(SPEED_TIME);nextRandom();}};
   const applyTheme=h=>{document.documentElement.classList.toggle('high-contrast',h);contrastToggle.setAttribute('aria-checked',h);state.theme=h?'high':'default';saveState();};
-  loadState();applyTheme(state.theme==='high');updateHud();rebuildTrophies();renderAvatar();startMode('explore');
+  loadState();applyTheme(state.theme==='high');updateHud();rebuildTrophies();renderAvatar();buildBoard();buildLessons();startMode('explore');
   modes.forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
   contrastToggle.addEventListener('click',()=>applyTheme(!document.documentElement.classList.contains('high-contrast')));
   answer.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();if(!/\d/.test(e.key)&&e.key.length===1)e.preventDefault();});
@@ -183,6 +220,10 @@ footer{text-align:center;padding:.5rem;}
   closeTrophies.addEventListener('click',()=>trophyModal.hidden=true);
   avatarBtn.addEventListener('click',()=>{buildAvatars();avatarModal.hidden=false;});
   closeAvatar.addEventListener('click',()=>avatarModal.hidden=true);
+  boardBtn.addEventListener('click',()=>{buildBoard();boardModal.hidden=false;});
+  closeBoard.addEventListener('click',()=>boardModal.hidden=true);
+  lessonBtn.addEventListener('click',()=>{buildLessons();lessonModal.hidden=false;});
+  closeLessons.addEventListener('click',()=>lessonModal.hidden=true);
   document.addEventListener('keydown',e=>{if(mode==='explore'){if(e.key==='ArrowRight')nextExplore();if(e.key==='ArrowLeft')exploreIndex=(exploreIndex+MAX_FACTOR*MAX_FACTOR-2)%(MAX_FACTOR*MAX_FACTOR);}});
 })();
 </script>
