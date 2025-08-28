@@ -260,6 +260,35 @@
                   <option value="t-shirt">T-Shirt</option>
                   <option value="hoodie">Hoodie</option>
                   <option value="jacket">Jacket</option>
+                  <option value="bodywarmer">Bodywarmer</option>
+                </select>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Branding Type</label>
+                <select id="branding-type" class="w-full p-3 border border-gray-300 rounded-md">
+                  <option value="">Select branding type</option>
+                  <option value="DTF (Direct to film)">DTF (Direct to film)</option>
+                </select>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Branding Position</label>
+                <select id="branding-position" class="w-full p-3 border border-gray-300 rounded-md">
+                  <option value="">Select position</option>
+                  <option value="Back Yoke">Back Yoke</option>
+                  <option value="Back">Back</option>
+                  <option value="Right Chest">Right Chest</option>
+                  <option value="Left Chest">Left Chest</option>
+                </select>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Branding Size</label>
+                <select id="branding-size" class="w-full p-3 border border-gray-300 rounded-md">
+                  <option value="">Select size</option>
+                  <option value="A6">A6</option>
+                  <option value="A5">A5</option>
+                  <option value="A4">A4</option>
+                  <option value="100mm x 60mm">100mm x 60mm</option>
+                  <option value="100mm x 30mm">100mm x 30mm</option>
                 </select>
               </div>
               <button
@@ -878,19 +907,48 @@
         const logoUploadArea = document.querySelector(".border-dashed");
         const logoUploadInput = document.getElementById("logo-upload");
         const apparelSelect = document.getElementById("apparel-type");
+        const brandingTypeSelect = document.getElementById("branding-type");
+        const brandingPositionSelect = document.getElementById("branding-position");
+        const brandingSizeSelect = document.getElementById("branding-size");
         let selectedLogo = null;
         let selectedApparel = "";
+        let selectedBrandingType = "";
+        let selectedBrandingPosition = "";
+        let selectedBrandingSize = "";
 
         if (apparelSelect) {
           apparelSelect.addEventListener("change", function () {
             selectedApparel = this.value;
           });
         }
+        if (brandingTypeSelect) {
+          brandingTypeSelect.addEventListener("change", function () {
+            selectedBrandingType = this.value;
+          });
+        }
+        if (brandingPositionSelect) {
+          brandingPositionSelect.addEventListener("change", function () {
+            selectedBrandingPosition = this.value;
+          });
+        }
+        if (brandingSizeSelect) {
+          brandingSizeSelect.addEventListener("change", function () {
+            selectedBrandingSize = this.value;
+          });
+        }
 
         if (generateButton) {
           generateButton.addEventListener("click", async function () {
-            if (!selectedLogo || !selectedApparel) {
-              alert("Please select a logo and apparel type first.");
+            if (
+              !selectedLogo ||
+              !selectedApparel ||
+              !selectedBrandingType ||
+              !selectedBrandingPosition ||
+              !selectedBrandingSize
+            ) {
+              alert(
+                "Please select a logo, apparel type, branding type, position, and size."
+              );
               return;
             }
             generateText.textContent = "Generating...";
@@ -899,7 +957,13 @@
               const response = await fetch("/api/generate", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ logo: selectedLogo, apparel: selectedApparel }),
+                body: JSON.stringify({
+                  logo: selectedLogo,
+                  apparel: selectedApparel,
+                  brandingType: selectedBrandingType,
+                  brandingPosition: selectedBrandingPosition,
+                  brandingSize: selectedBrandingSize,
+                }),
               });
               const data = await response.json();
               if (data.image) {

@@ -10,14 +10,15 @@ app.use(express.json({ limit: '10mb' }));
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post('/api/generate', async (req, res) => {
-  const { logo, apparel } = req.body;
-  if (!logo || !apparel) {
-    return res.status(400).json({ error: 'Missing logo or apparel type' });
+  const { logo, apparel, brandingType, brandingPosition, brandingSize } = req.body;
+  if (!logo || !apparel || !brandingType || !brandingPosition || !brandingSize) {
+    return res.status(400).json({ error: 'Missing logo, apparel, branding type, position, or size' });
   }
   try {
+    const prompt = `Create a product mockup of a ${apparel} featuring the supplied logo. Apply ${brandingType} branding on the ${brandingPosition} at size ${brandingSize}.`;
     const response = await openai.images.generate({
       model: 'gpt-image-1',
-      prompt: `Create a product mockup of a ${apparel} featuring the supplied logo.`,
+      prompt,
       image: [
         {
           type: 'input_image',
