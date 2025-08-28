@@ -1,232 +1,945 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PromoAI Logo Design</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PromoAI - AI-Powered Branded Samples</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
     <style>
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 2rem;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      .brand-logo-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 1rem;
+      }
+      .branding-options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 1rem;
+      }
+      @media (max-width: 768px) {
+        .brand-logo-grid {
+          grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         }
-        .logo-options {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 2rem;
-            width: 100%;
-            max-width: 1200px;
+        .branding-options-grid {
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
         }
-        .logo-card {
-            background: white;
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.3s ease;
+      }
+      .hero-section {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80");
+        background-size: cover;
+        background-position: center;
+      }
+      .sublimation-section {
+        background:
+          linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+          url("https://images.unsplash.com/photo-1535223289827-42f1e9919769?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80");
+        background-size: cover;
+        background-position: center;
+      }
+      .ai-preview-section {
+        background: linear-gradient(135deg, #4b6cb7 0%, #182848 100%);
+      }
+      .try-ai-button {
+        background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+        transition: all 0.3s ease;
+      }
+      .try-ai-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+      }
+      .ai-generator-container {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+      .preview-box {
+        background: #f8f9fa;
+        border: 2px dashed #dee2e6;
+        border-radius: 8px;
+        min-height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+      .preview-box:hover {
+        border-color: #4b6cb7;
+      }
+      .generate-button {
+        background: linear-gradient(90deg, #4b6cb7 0%, #182848 100%);
+        transition: all 0.3s ease;
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+      .generate-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(75, 108, 183, 0.4);
+      }
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 1s ease-in-out infinite;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
-        .logo-card:hover {
-            transform: translateY(-5px);
-        }
-        .logo-preview {
-            width: 200px;
-            height: 200px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 1.5rem;
-        }
-        .color-options {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-        .color-option {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid white;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .selected-logo {
-            border: 3px solid #4f46e5;
-        }
-        .vote-button {
-            margin-top: 1rem;
-            padding: 0.5rem 1.5rem;
-            background: #4f46e5;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .vote-button:hover {
-            background: #3730a3;
-        }
+      }
     </style>
-</head>
-<body>
-    <div class="logo-container">
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">PromoAI Logo Concepts</h1>
-        <p class="text-gray-600 mb-8 text-center max-w-2xl">Select your favorite logo design for our AI-powered branding platform</p>
-        
-        <div class="logo-options">
-            <!-- Logo Option 1 -->
-            <div class="logo-card">
-                <h2 class="text-xl font-semibold mb-4">Concept 1: Neural Brand</h2>
-                <div class="logo-preview">
-                    <svg width="150" height="150" viewBox="0 0 150 150">
-                        <defs>
-                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#4f46e5" />
-                                <stop offset="100%" stop-color="#7c3aed" />
-                            </linearGradient>
-                        </defs>
-                        <circle cx="75" cy="75" r="60" fill="url(#grad1)" />
-                        <path d="M55,60 Q75,40 95,60 T135,60" stroke="white" stroke-width="3" fill="none" />
-                        <path d="M55,75 Q75,55 95,75 T135,75" stroke="white" stroke-width="3" fill="none" />
-                        <path d="M55,90 Q75,70 95,90 T135,90" stroke="white" stroke-width="3" fill="none" />
-                        <circle cx="45" cy="60" r="5" fill="white" />
-                        <circle cx="45" cy="75" r="5" fill="white" />
-                        <circle cx="45" cy="90" r="5" fill="white" />
-                        <text x="75" y="120" text-anchor="middle" fill="white" font-size="16" font-weight="bold">PromoAI</text>
-                    </svg>
-                </div>
-                <p class="text-gray-600 text-center">Represents the connection between AI neural networks and branding</p>
-                <div class="color-options">
-                    <div class="color-option" style="background-color: #4f46e5;"></div>
-                    <div class="color-option" style="background-color: #059669;"></div>
-                    <div class="color-option" style="background-color: #dc2626;"></div>
-                    <div class="color-option" style="background-color: #7c3aed;"></div>
-                </div>
-                <button class="vote-button">Select This Logo</button>
+  </head>
+  <body class="font-sans bg-gray-50">
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3">
+        <div class="flex justify-between items-center">
+          <!-- Mobile menu button -->
+          <button class="md:hidden text-gray-700">
+            <i class="fas fa-bars text-xl"></i>
+          </button>
+          <!-- Logo -->
+          <div class="flex items-center">
+            <a href="/" class="flex items-center">
+              <span
+                class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent"
+                >PromoAI</span
+              >
+            </a>
+          </div>
+          <!-- Desktop Navigation -->
+          <nav class="hidden md:flex space-x-6">
+            <a href="#" class="text-gray-700 hover:text-blue-600">Industries</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600">Templates</a>
+            <a href="#" class="text-gray-700 hover:text-blue-600"
+              >AI Branding</a
+            >
+          </nav>
+          <!-- Right side icons -->
+          <div class="flex items-center space-x-4">
+            <!-- Account dropdown -->
+            <div class="relative group">
+              <button
+                class="flex items-center text-gray-700 hover:text-blue-600"
+              >
+                <i class="fas fa-user mr-1"></i>
+                <span>Account</span>
+              </button>
+              <div
+                class="absolute right-0 mt-2 w-56 bg-white rounded-md shadow-lg py-1 z-50 hidden group-hover:block"
+              >
+                <a
+                  href="javascript:;"
+                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >Login</a
+                >
+                <a
+                  href="#"
+                  class="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >Register</a
+                >
+              </div>
             </div>
-            
-            <!-- Logo Option 2 -->
-            <div class="logo-card">
-                <h2 class="text-xl font-semibold mb-4">Concept 2: Smart Pixel</h2>
-                <div class="logo-preview">
-                    <svg width="150" height="150" viewBox="0 0 150 150">
-                        <defs>
-                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#059669" />
-                                <stop offset="100%" stop-color="#10b981" />
-                            </linearGradient>
-                        </defs>
-                        <rect x="45" y="45" width="60" height="60" rx="10" fill="url(#grad2)" />
-                        <circle cx="60" cy="60" r="5" fill="white" />
-                        <circle cx="75" cy="60" r="5" fill="white" />
-                        <circle cx="90" cy="60" r="5" fill="white" />
-                        <circle cx="60" cy="75" r="5" fill="white" />
-                        <circle cx="75" cy="75" r="8" fill="white" />
-                        <circle cx="90" cy="75" r="5" fill="white" />
-                        <circle cx="60" cy="90" r="5" fill="white" />
-                        <circle cx="75" cy="90" r="5" fill="white" />
-                        <circle cx="90" cy="90" r="5" fill="white" />
-                        <text x="75" y="120" text-anchor="middle" fill="#059669" font-size="16" font-weight="bold">PromoAI</text>
-                    </svg>
-                </div>
-                <p class="text-gray-600 text-center">Symbolizes the digital transformation of branding through AI technology</p>
-                <div class="color-options">
-                    <div class="color-option" style="background-color: #4f46e5;"></div>
-                    <div class="color-option" style="background-color: #059669;"></div>
-                    <div class="color-option" style="background-color: #dc2626;"></div>
-                    <div class="color-option" style="background-color: #7c3aed;"></div>
-                </div>
-                <button class="vote-button">Select This Logo</button>
-            </div>
-            
-            <!-- Logo Option 3 -->
-            <div class="logo-card">
-                <h2 class="text-xl font-semibold mb-4">Concept 3: Brand Fusion</h2>
-                <div class="logo-preview">
-                    <svg width="150" height="150" viewBox="0 0 150 150">
-                        <defs>
-                            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#dc2626" />
-                                <stop offset="100%" stop-color="#ea580c" />
-                            </linearGradient>
-                        </defs>
-                        <path d="M75,30 L90,60 L120,60 L100,80 L110,110 L75,95 L40,110 L50,80 L30,60 L60,60 Z" fill="url(#grad3)" />
-                        <circle cx="75" cy="65" r="15" fill="white" />
-                        <path d="M70,60 L75,70 L85,55" stroke="url(#grad3)" stroke-width="3" fill="none" />
-                        <text x="75" y="120" text-anchor="middle" fill="#dc2626" font-size="16" font-weight="bold">PromoAI</text>
-                    </svg>
-                </div>
-                <p class="text-gray-600 text-center">Represents the fusion of AI intelligence with brand identity creation</p>
-                <div class="color-options">
-                    <div class="color-option" style="background-color: #4f46e5;"></div>
-                    <div class="color-option" style="background-color: #059669;"></div>
-                    <div class="color-option" style="background-color: #dc2626;"></div>
-                    <div class="color-option" style="background-color: #7c3aed;"></div>
-                </div>
-                <button class="vote-button">Select This Logo</button>
-            </div>
+            <!-- Cart -->
+            <button
+              class="flex items-center text-gray-700 hover:text-blue-600 relative"
+            >
+              <i class="fas fa-shopping-cart mr-1"></i>
+              <span>Cart</span>
+              <span
+                class="absolute -top-2 -right-2 bg-blue-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"
+                >0</span
+              >
+            </button>
+          </div>
         </div>
+      </div>
+    </header>
+    <!-- Hero Section -->
+    <section class="hero-section text-white py-20 px-4">
+      <div class="container mx-auto max-w-4xl text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+          AI-Powered Branded Samples in Real Time
+        </h1>
+        <p class="text-xl mb-8">
+          Our cutting-edge AI technology generates professional branded samples
+          instantly. See your logo on hundreds of products before making a
+          decision - no design skills needed!
+        </p>
+        <a
+          href="#ai-generator"
+          class="bg-white text-blue-600 font-semibold px-6 py-3 rounded-md hover:bg-blue-50 transition duration-300 inline-block"
+          >Try AI Generator</a
+        >
+      </div>
+    </section>
+    <!-- AI Generator Section -->
+    <section id="ai-generator" class="py-16 ai-preview-section text-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-4">
+          Instant AI Brand Preview
+        </h2>
+        <p class="text-xl text-center mb-12">
+          Upload your logo and see it on products in seconds
+        </p>
+        <div class="ai-generator-container p-6 max-w-4xl mx-auto">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-800 mb-4">
+                Customize Your Brand
+              </h3>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Upload Your Logo</label>
+                <div
+                  class="border-2 border-dashed border-gray-300 rounded-md p-4 text-center"
+                >
+                  <i
+                    class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"
+                  ></i>
+                  <p class="text-gray-500">
+                    Drag & drop your logo or
+                    <span class="text-blue-600 cursor-pointer"
+                      >browse files</span
+                    >
+                  </p>
+                  <input type="file" class="hidden" id="logo-upload" />
+                </div>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Brand Colors</label>
+                <div class="flex space-x-2">
+                  <div
+                    class="w-8 h-8 rounded-full bg-blue-600 cursor-pointer"
+                  ></div>
+                  <div
+                    class="w-8 h-8 rounded-full bg-red-500 cursor-pointer"
+                  ></div>
+                  <div
+                    class="w-8 h-8 rounded-full bg-green-500 cursor-pointer"
+                  ></div>
+                  <div
+                    class="w-8 h-8 rounded-full bg-yellow-400 cursor-pointer"
+                  ></div>
+                  <div
+                    class="w-8 h-8 rounded-full bg-gray-800 cursor-pointer"
+                  ></div>
+                  <div
+                    class="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center cursor-pointer"
+                  >
+                    <i class="fas fa-plus text-gray-400"></i>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Product Type</label>
+                <select class="w-full p-3 border border-gray-300 rounded-md">
+                  <option>All Products</option>
+                  <option>Apparel</option>
+                  <option>Tech Accessories</option>
+                  <option>Drinkware</option>
+                  <option>Stationery</option>
+                </select>
+              </div>
+              <button
+                class="generate-button w-full flex items-center justify-center"
+              >
+                <span id="generate-text">Generate Samples</span>
+                <span
+                  id="generate-loading"
+                  class="loading-spinner ml-2 hidden"
+                ></span>
+              </button>
+            </div>
+            <div>
+              <h3 class="text-2xl font-bold text-gray-800 mb-4">AI Preview</h3>
+              <div class="preview-box">
+                <p class="text-gray-500 text-center">
+                  Your AI-generated samples will appear here
+                </p>
+              </div>
+              <div class="mt-4 text-center">
+                <p class="text-gray-600 text-sm">
+                  Our AI analyzes your brand and generates photorealistic
+                  samples instantly
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Benefits Section -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">
+          Why Use AI for Your Branding Samples?
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div
+            class="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition duration-300"
+          >
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-bolt text-2xl text-blue-600"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Instant Results</h3>
+            <p class="text-gray-600">
+              See your branding on products in seconds, not days. Our AI
+              generates realistic samples instantly.
+            </p>
+          </div>
+          <div
+            class="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition duration-300"
+          >
+            <div
+              class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-money-bill-wave text-2xl text-green-600"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Cost Effective</h3>
+            <p class="text-gray-600">
+              No need for physical samples. Save time and money while making
+              informed branding decisions.
+            </p>
+          </div>
+          <div
+            class="text-center p-6 rounded-lg bg-gray-50 hover:shadow-md transition duration-300"
+          >
+            <div
+              class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <i class="fas fa-swatchbook text-2xl text-purple-600"></i>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Unlimited Options</h3>
+            <p class="text-gray-600">
+              Try your branding on hundreds of products with different colors
+              and placements in real-time.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Top Sellers -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">
+          Popular Products for Branding
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+          <div
+            class="bg-white rounded-lg p-4 h-64 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition duration-300"
+          >
+            <i class="fas fa-tshirt text-4xl text-blue-600 mb-3"></i>
+            <p class="text-gray-800 font-medium">Apparel</p>
+            <p class="text-gray-500 text-sm mt-1">T-shirts, polos, jackets</p>
+          </div>
+          <div
+            class="bg-white rounded-lg p-4 h-64 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition duration-300"
+          >
+            <i class="fas fa-mug-hot text-4xl text-blue-600 mb-3"></i>
+            <p class="text-gray-800 font-medium">Drinkware</p>
+            <p class="text-gray-500 text-sm mt-1">Mugs, bottles, tumblers</p>
+          </div>
+          <div
+            class="bg-white rounded-lg p-4 h-64 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition duration-300"
+          >
+            <i class="fas fa-laptop text-4xl text-blue-600 mb-3"></i>
+            <p class="text-gray-800 font-medium">Tech Accessories</p>
+            <p class="text-gray-500 text-sm mt-1">Phone cases, power banks</p>
+          </div>
+          <div
+            class="bg-white rounded-lg p-4 h-64 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition duration-300"
+          >
+            <i class="fas fa-gift text-4xl text-blue-600 mb-3"></i>
+            <p class="text-gray-800 font-medium">Corporate Gifts</p>
+            <p class="text-gray-500 text-sm mt-1">Custom branded items</p>
+          </div>
+          <div
+            class="bg-white rounded-lg p-4 h-64 flex flex-col items-center justify-center shadow-sm hover:shadow-md transition duration-300 md:hidden lg:flex"
+          >
+            <i class="fas fa-sticky-note text-4xl text-blue-600 mb-3"></i>
+            <p class="text-gray-800 font-medium">Stationery</p>
+            <p class="text-gray-500 text-sm mt-1">Notebooks, pens, calendars</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- How It Works -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">
+          How Our AI Technology Works
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl font-bold text-blue-600">1</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Upload Your Logo</h3>
+            <p class="text-gray-600">
+              Simply upload your logo or design file in any format
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl font-bold text-blue-600">2</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2">AI Analysis</h3>
+            <p class="text-gray-600">
+              Our AI analyzes colors, composition, and branding elements
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl font-bold text-blue-600">3</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Generate Samples</h3>
+            <p class="text-gray-600">
+              Instantly see your branding on various products
+            </p>
+          </div>
+          <div class="text-center">
+            <div
+              class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4"
+            >
+              <span class="text-2xl font-bold text-blue-600">4</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2">Refine & Order</h3>
+            <p class="text-gray-600">
+              Make adjustments and place your order with confidence
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Logo Concepts -->
+    <section id="logo-concepts" class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-4">
+          PromoAI Logo Concepts
+        </h2>
+        <p class="text-gray-600 text-center mb-12">
+          Select your favorite logo design for our AI-powered branding platform
+        </p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <!-- Logo Option 1 -->
+          <div
+            class="logo-card bg-white p-6 rounded-lg shadow flex flex-col items-center"
+          >
+            <h3 class="text-xl font-semibold mb-4 text-center">
+              Concept 1: Neural Brand
+            </h3>
+            <div class="mb-4">
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <defs>
+                  <linearGradient
+                    id="grad1"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#4f46e5" />
+                    <stop offset="100%" stop-color="#7c3aed" />
+                  </linearGradient>
+                </defs>
+                <circle cx="75" cy="75" r="60" fill="url(#grad1)" />
+                <path
+                  d="M55,60 Q75,40 95,60 T135,60"
+                  stroke="white"
+                  stroke-width="3"
+                  fill="none"
+                />
+                <path
+                  d="M55,75 Q75,55 95,75 T135,75"
+                  stroke="white"
+                  stroke-width="3"
+                  fill="none"
+                />
+                <path
+                  d="M55,90 Q75,70 95,90 T135,90"
+                  stroke="white"
+                  stroke-width="3"
+                  fill="none"
+                />
+                <circle cx="45" cy="60" r="5" fill="white" />
+                <circle cx="45" cy="75" r="5" fill="white" />
+                <circle cx="45" cy="90" r="5" fill="white" />
+                <text
+                  x="75"
+                  y="120"
+                  text-anchor="middle"
+                  fill="white"
+                  font-size="16"
+                  font-weight="bold"
+                >
+                  PromoAI
+                </text>
+              </svg>
+            </div>
+            <p class="text-gray-600 text-center">
+              Represents the connection between AI neural networks and branding
+            </p>
+            <div class="flex gap-2 mt-4">
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #4f46e5"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #059669"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #dc2626"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #7c3aed"
+              ></div>
+            </div>
+            <button
+              class="vote-button mt-6 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Select This Logo
+            </button>
+          </div>
+          <!-- Logo Option 2 -->
+          <div
+            class="logo-card bg-white p-6 rounded-lg shadow flex flex-col items-center"
+          >
+            <h3 class="text-xl font-semibold mb-4 text-center">
+              Concept 2: Smart Pixel
+            </h3>
+            <div class="mb-4">
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <defs>
+                  <linearGradient
+                    id="grad2"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#059669" />
+                    <stop offset="100%" stop-color="#10b981" />
+                  </linearGradient>
+                </defs>
+                <rect
+                  x="45"
+                  y="45"
+                  width="60"
+                  height="60"
+                  rx="10"
+                  fill="url(#grad2)"
+                />
+                <circle cx="60" cy="60" r="5" fill="white" />
+                <circle cx="75" cy="60" r="5" fill="white" />
+                <circle cx="90" cy="60" r="5" fill="white" />
+                <circle cx="60" cy="75" r="5" fill="white" />
+                <circle cx="75" cy="75" r="8" fill="white" />
+                <circle cx="90" cy="75" r="5" fill="white" />
+                <circle cx="60" cy="90" r="5" fill="white" />
+                <circle cx="75" cy="90" r="5" fill="white" />
+                <circle cx="90" cy="90" r="5" fill="white" />
+                <text
+                  x="75"
+                  y="120"
+                  text-anchor="middle"
+                  fill="#059669"
+                  font-size="16"
+                  font-weight="bold"
+                >
+                  PromoAI
+                </text>
+              </svg>
+            </div>
+            <p class="text-gray-600 text-center">
+              Symbolizes the digital transformation of branding through AI
+              technology
+            </p>
+            <div class="flex gap-2 mt-4">
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #4f46e5"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #059669"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #dc2626"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #7c3aed"
+              ></div>
+            </div>
+            <button
+              class="vote-button mt-6 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Select This Logo
+            </button>
+          </div>
+          <!-- Logo Option 3 -->
+          <div
+            class="logo-card bg-white p-6 rounded-lg shadow flex flex-col items-center"
+          >
+            <h3 class="text-xl font-semibold mb-4 text-center">
+              Concept 3: Brand Fusion
+            </h3>
+            <div class="mb-4">
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <defs>
+                  <linearGradient
+                    id="grad3"
+                    x1="0%"
+                    y1="0%"
+                    x2="100%"
+                    y2="100%"
+                  >
+                    <stop offset="0%" stop-color="#dc2626" />
+                    <stop offset="100%" stop-color="#ea580c" />
+                  </linearGradient>
+                </defs>
+                <path
+                  d="M75,30 L90,60 L120,60 L100,80 L110,110 L75,95 L40,110 L50,80 L30,60 L60,60 Z"
+                  fill="url(#grad3)"
+                />
+                <circle cx="75" cy="65" r="15" fill="white" />
+                <path
+                  d="M70,60 L75,70 L85,55"
+                  stroke="url(#grad3)"
+                  stroke-width="3"
+                  fill="none"
+                />
+                <text
+                  x="75"
+                  y="120"
+                  text-anchor="middle"
+                  fill="#dc2626"
+                  font-size="16"
+                  font-weight="bold"
+                >
+                  PromoAI
+                </text>
+              </svg>
+            </div>
+            <p class="text-gray-600 text-center">
+              Represents the fusion of AI intelligence with brand identity
+              creation
+            </p>
+            <div class="flex gap-2 mt-4">
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #4f46e5"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #059669"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #dc2626"
+              ></div>
+              <div
+                class="color-option w-6 h-6 rounded-full cursor-pointer border-2 border-white shadow"
+                style="background-color: #7c3aed"
+              ></div>
+            </div>
+            <button
+              class="vote-button mt-6 px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition"
+            >
+              Select This Logo
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Testimonials -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-12">
+          What Our Customers Say
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+              <div>
+                <h4 class="font-bold">Sarah Johnson</h4>
+                <p class="text-gray-500">Marketing Director</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              "PromoAI saved us weeks of sample production time. Being able to
+              see our branding on different products instantly helped us make
+              better decisions."
+            </p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+              <div>
+                <h4 class="font-bold">Michael Chen</h4>
+                <p class="text-gray-500">Startup Founder</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              "The AI-generated samples were incredibly realistic. We could
+              visualize our products before production, which eliminated costly
+              mistakes."
+            </p>
+          </div>
+          <div class="bg-white p-6 rounded-lg shadow-sm">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-gray-200 rounded-full mr-4"></div>
+              <div>
+                <h4 class="font-bold">Jessica Williams</h4>
+                <p class="text-gray-500">Brand Manager</p>
+              </div>
+            </div>
+            <p class="text-gray-600">
+              "The real-time preview feature is game-changing. We experimented
+              with different color schemes and placements in minutes instead of
+              weeks."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- CTA Section -->
+    <section
+      class="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+    >
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">
+          Ready to See Your Brand Come to Life?
+        </h2>
+        <p class="text-xl mb-8">
+          Experience the power of AI-generated branding samples
+        </p>
+        <a
+          href="#ai-generator"
+          class="try-ai-button font-semibold px-8 py-4 rounded-md text-white inline-block"
+          >Try Our AI Generator Now</a
+        >
+      </div>
+    </section>
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-12 pb-6">
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
+          <!-- Product -->
+          <div>
+            <h3 class="text-xl font-bold mb-4">Product</h3>
+            <ul class="space-y-2">
+              <li>
+                <a href="#" class="hover:text-blue-400">AI Branding Tool</a>
+              </li>
+              <li><a href="#" class="hover:text-blue-400">Templates</a></li>
+              <li>
+                <a href="#" class="hover:text-blue-400">Product Catalog</a>
+              </li>
+            </ul>
+          </div>
+          <!-- Company -->
+          <div>
+            <h3 class="text-xl font-bold mb-4">Company</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-blue-400">About Us</a></li>
+              <li><a href="#" class="hover:text-blue-400">Careers</a></li>
+              <li><a href="#" class="hover:text-blue-400">Contact Us</a></li>
+              <li>
+                <a href="#" class="hover:text-blue-400">Privacy Policy</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-blue-400">Terms of Service</a>
+              </li>
+            </ul>
+          </div>
+          <!-- Resources -->
+          <div>
+            <h3 class="text-xl font-bold mb-4">Resources</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-blue-400">Blog</a></li>
+              <li><a href="#" class="hover:text-blue-400">Case Studies</a></li>
+              <li><a href="#" class="hover:text-blue-400">FAQs</a></li>
+            </ul>
+          </div>
+          <!-- Newsletter -->
+          <div>
+            <h3 class="text-xl font-bold mb-4">Stay Updated</h3>
+            <p class="mb-4">Get the latest news on AI branding technology</p>
+            <div class="flex">
+              <input
+                type="email"
+                placeholder="Email address"
+                class="px-4 py-2 w-full rounded-l-md text-gray-900"
+              />
+              <button
+                class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-r-md"
+              >
+                Subscribe
+              </button>
+            </div>
+            <div class="flex space-x-4 mt-4">
+              <a href="#" class="hover:text-blue-400"
+                ><i class="fab fa-facebook-f text-xl"></i
+              ></a>
+              <a href="#" class="hover:text-blue-400"
+                ><i class="fab fa-instagram text-xl"></i
+              ></a>
+              <a href="#" class="hover:text-blue-400"
+                ><i class="fab fa-twitter text-xl"></i
+              ></a>
+              <a href="#" class="hover:text-blue-400"
+                ><i class="fab fa-linkedin-in text-xl"></i
+              ></a>
+            </div>
+          </div>
+        </div>
+        <!-- Bottom footer -->
+        <div
+          class="flex flex-col md:flex-row justify-between items-center mt-6 pt-6 border-t border-gray-700"
+        >
+          <div class="mb-4 md:mb-0">
+            <a href="/">
+              <span
+                class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent"
+                >PromoAI</span
+              >
+            </a>
+          </div>
+          <div class="text-sm text-gray-400">
+            &copy; 2023 PromoAI. All rights reserved.
+          </div>
+        </div>
+      </div>
+    </footer>
+    <!-- Mobile bottom navigation -->
+    <div
+      class="md:hidden fixed bottom-0 left-0 right-0 bg-white shadow-lg z-50"
+    >
+      <div class="flex justify-around py-3">
+        <a href="#" class="flex flex-col items-center text-blue-600">
+          <i class="fas fa-home text-xl"></i>
+          <span class="text-xs mt-1">Home</span>
+        </a>
+        <a
+          href="#ai-generator"
+          class="flex flex-col items-center text-gray-600"
+        >
+          <i class="fas fa-robot text-xl"></i>
+          <span class="text-xs mt-1">AI Tool</span>
+        </a>
+        <a href="#" class="flex flex-col items-center text-gray-600">
+          <i class="fas fa-user text-xl"></i>
+          <span class="text-xs mt-1">Account</span>
+        </a>
+      </div>
     </div>
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const voteButtons = document.querySelectorAll('.vote-button');
-            
-            voteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove any existing selections
-                    voteButtons.forEach(btn => {
-                        btn.textContent = 'Select This Logo';
-                        btn.parentElement.classList.remove('selected-logo');
-                    });
-                    
-                    // Mark this as selected
-                    this.textContent = 'Selected ✓';
-                    this.parentElement.classList.add('selected-logo');
-                    
-                    // Alert the selection (in a real scenario, this would save the preference)
-                    const logoName = this.parentElement.querySelector('h2').textContent;
-                    alert(`You've selected ${logoName}. This preference would be saved in a real application.`);
-                });
+      document.addEventListener("DOMContentLoaded", function () {
+        const generateButton = document.querySelector(".generate-button");
+        const generateText = document.getElementById("generate-text");
+        const generateLoading = document.getElementById("generate-loading");
+        if (generateButton) {
+          generateButton.addEventListener("click", function () {
+            generateText.textContent = "Generating...";
+            generateLoading.classList.remove("hidden");
+            setTimeout(function () {
+              generateText.textContent = "Generate Samples";
+              generateLoading.classList.add("hidden");
+              const previewBox = document.querySelector(".preview-box");
+              previewBox.innerHTML = `
+                            <div class="text-center">
+                                <i class="fas fa-check-circle text-4xl text-green-500 mb-2"></i>
+                                <p class="font-medium">Samples Generated Successfully!</p>
+                                <p class="text-sm text-gray-500 mt-1">Scroll down to view your branded products</p>
+                            </div>
+                        `;
+            }, 2000);
+          });
+        }
+        const logoUploadArea = document.querySelector(".border-dashed");
+        const logoUploadInput = document.getElementById("logo-upload");
+        if (logoUploadArea && logoUploadInput) {
+          logoUploadArea.addEventListener("click", function () {
+            logoUploadInput.click();
+          });
+          logoUploadInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+              const fileName = this.files[0].name;
+              logoUploadArea.innerHTML = `
+                            <i class="fas fa-file-image text-3xl text-blue-500 mb-2"></i>
+                            <p class="text-gray-700">${fileName}</p>
+                            <p class="text-sm text-gray-500">Click to change</p>
+                        `;
+            }
+          });
+        }
+        // Logo concept interactions
+        const voteButtons = document.querySelectorAll(".vote-button");
+        voteButtons.forEach((button) => {
+          button.addEventListener("click", function () {
+            voteButtons.forEach((btn) => {
+              btn.textContent = "Select This Logo";
+              btn.parentElement.classList.remove("ring-4", "ring-indigo-500");
             });
-            
-            // Color option functionality
-            const colorOptions = document.querySelectorAll('.color-option');
-            colorOptions.forEach(option => {
-                option.addEventListener('click', function() {
-                    const color = this.style.backgroundColor;
-                    const logoCard = this.closest('.logo-card');
-                    const svg = logoCard.querySelector('svg');
-                    
-                    // Change the main gradient color
-                    const gradient = svg.querySelector('linearGradient');
-                    const stops = gradient.querySelectorAll('stop');
-                    
-                    // Lighten color for the gradient
-                    const rgb = color.match(/\d+/g);
-                    const r = parseInt(rgb[0]);
-                    const g = parseInt(rgb[1]);
-                    const b = parseInt(rgb[2]);
-                    
-                    // Set gradient stops
-                    stops[0].setAttribute('stop-color', color);
-                    stops[1].setAttribute('stop-color', `rgb(${Math.min(r+40, 255)}, ${Math.min(g+40, 255)}, ${Math.min(b+40, 255)})`);
-                    
-                    // Change text color if needed
-                    const text = svg.querySelector('text');
-                    if (text) {
-                        text.setAttribute('fill', color);
-                    }
-                });
-            });
+            this.textContent = "Selected \u2713";
+            this.parentElement.classList.add("ring-4", "ring-indigo-500");
+            const logoName = this.parentElement.querySelector("h3").textContent;
+            alert(
+              `You've selected ${logoName}. This preference would be saved in a real application.`,
+            );
+          });
         });
+        const colorOptions = document.querySelectorAll(".color-option");
+        colorOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            const color = this.style.backgroundColor;
+            const logoCard = this.closest(".logo-card");
+            const svg = logoCard.querySelector("svg");
+            const gradient = svg.querySelector("linearGradient");
+            const stops = gradient.querySelectorAll("stop");
+            const rgb = color.match(/\d+/g);
+            const r = parseInt(rgb[0]);
+            const g = parseInt(rgb[1]);
+            const b = parseInt(rgb[2]);
+            stops[0].setAttribute("stop-color", color);
+            stops[1].setAttribute(
+              "stop-color",
+              `rgb(${Math.min(r + 40, 255)}, ${Math.min(g + 40, 255)}, ${Math.min(b + 40, 255)})`,
+            );
+            const text = svg.querySelector("text");
+            if (text) {
+              text.setAttribute("fill", color);
+            }
+          });
+        });
+      });
     </script>
-</body>
+  </body>
 </html>
