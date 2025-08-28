@@ -245,12 +245,21 @@
               </div>
               <div class="mb-6">
                 <label class="block text-gray-700 mb-2">Product Type</label>
-                <select class="w-full p-3 border border-gray-300 rounded-md">
+                <select id="product-type" class="w-full p-3 border border-gray-300 rounded-md">
                   <option>All Products</option>
                   <option>Apparel</option>
                   <option>Tech Accessories</option>
                   <option>Drinkware</option>
                   <option>Stationery</option>
+                </select>
+              </div>
+              <div class="mb-6">
+                <label class="block text-gray-700 mb-2">Apparel Type</label>
+                <select id="apparel-type" class="w-full p-3 border border-gray-300 rounded-md">
+                  <option value="">Select apparel</option>
+                  <option value="t-shirt">T-Shirt</option>
+                  <option value="hoodie">Hoodie</option>
+                  <option value="jacket">Jacket</option>
                 </select>
               </div>
               <button
@@ -865,33 +874,61 @@
         const generateButton = document.querySelector(".generate-button");
         const generateText = document.getElementById("generate-text");
         const generateLoading = document.getElementById("generate-loading");
-        if (generateButton) {
-          generateButton.addEventListener("click", function () {
-            generateText.textContent = "Generating...";
-            generateLoading.classList.remove("hidden");
-            setTimeout(function () {
-              generateText.textContent = "Generate Samples";
-              generateLoading.classList.add("hidden");
-              const previewBox = document.querySelector(".preview-box");
-              previewBox.innerHTML = `
-                            <div class="text-center">
-                                <i class="fas fa-check-circle text-4xl text-green-500 mb-2"></i>
-                                <p class="font-medium">Samples Generated Successfully!</p>
-                                <p class="text-sm text-gray-500 mt-1">Scroll down to view your branded products</p>
-                            </div>
-                        `;
-            }, 2000);
-          });
-        }
+        const previewBox = document.querySelector(".preview-box");
         const logoUploadArea = document.querySelector(".border-dashed");
         const logoUploadInput = document.getElementById("logo-upload");
+        const apparelSelect = document.getElementById("apparel-type");
+        let selectedLogo = null;
+        let selectedApparel = "";
+
+        if (apparelSelect) {
+          apparelSelect.addEventListener("change", function () {
+            selectedApparel = this.value;
+          });
+        }
+
+        if (generateButton) {
+          generateButton.addEventListener("click", async function () {
+            if (!selectedLogo || !selectedApparel) {
+              alert("Please select a logo and apparel type first.");
+              return;
+            }
+            generateText.textContent = "Generating...";
+            generateLoading.classList.remove("hidden");
+            try {
+              const response = await fetch("/api/generate", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ logo: selectedLogo, apparel: selectedApparel }),
+              });
+              const data = await response.json();
+              if (data.image) {
+                previewBox.innerHTML = `<img src="${data.image}" alt="AI preview" class="mx-auto rounded" />`;
+              } else {
+                previewBox.innerHTML = `<p class="text-red-500">Generation failed.</p>`;
+              }
+            } catch (err) {
+              previewBox.innerHTML = `<p class="text-red-500">Generation failed.</p>`;
+            } finally {
+              generateText.textContent = "Generate Samples";
+              generateLoading.classList.add("hidden");
+            }
+          });
+        }
+
         if (logoUploadArea && logoUploadInput) {
           logoUploadArea.addEventListener("click", function () {
             logoUploadInput.click();
           });
           logoUploadInput.addEventListener("change", function () {
             if (this.files && this.files[0]) {
-              const fileName = this.files[0].name;
+              const file = this.files[0];
+              const fileName = file.name;
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                selectedLogo = e.target.result;
+              };
+              reader.readAsDataURL(file);
               logoUploadArea.innerHTML = `
                             <i class="fas fa-file-image text-3xl text-blue-500 mb-2"></i>
                             <p class="text-gray-700">${fileName}</p>
@@ -900,7 +937,7 @@
             }
           });
         }
-        // Logo concept interactions
+
         const voteButtons = document.querySelectorAll(".vote-button");
         voteButtons.forEach((button) => {
           button.addEventListener("click", function () {
@@ -910,12 +947,21 @@
             });
             this.textContent = "Selected \u2713";
             this.parentElement.classList.add("ring-4", "ring-indigo-500");
-            const logoName = this.parentElement.querySelector("h3").textContent;
-            alert(
-              `You've selected ${logoName}. This preference would be saved in a real application.`,
-            );
+
+            const svg = this.parentElement.querySelector("svg");
+            if (svg) {
+              const serializer = new XMLSerializer();
+              const svgStr = serializer.serializeToString(svg);
+              const blob = new Blob([svgStr], { type: "image/svg+xml" });
+              const reader = new FileReader();
+              reader.onload = function (e) {
+                selectedLogo = e.target.result;
+              };
+              reader.readAsDataURL(blob);
+            }
           });
         });
+
         const colorOptions = document.querySelectorAll(".color-option");
         colorOptions.forEach((option) => {
           option.addEventListener("click", function () {
