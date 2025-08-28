@@ -1,231 +1,232 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="A free interactive multiplication game for children. Master times tables with fun quizzes and rewards.">
-<title>Times-Table Quest</title>
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#fff;
-  --fg:#222;
-  --accent:#0068c9;
-  --hc-bg:#000;
-  --hc-fg:#ffd800;
-  --hc-accent:#ff9800;
-  font-family:'Fira Sans',sans-serif;
-  font-size:16px;
-}
-body{margin:0;background:var(--bg);color:var(--fg);display:flex;flex-direction:column;min-height:100vh;transition:background .3s,color .3s;}
-.high-contrast{--bg:var(--hc-bg);--fg:var(--hc-fg);--accent:var(--hc-accent);}
-button,input{font:inherit;}
-button:focus-visible,input:focus-visible{outline:3px solid var(--accent);outline-offset:2px;}
-header{display:flex;justify-content:space-between;align-items:center;padding:.5rem 1rem;background:var(--accent);color:#fff;}
-.avatar{font-size:2rem;padding-right:.5rem;}
-.mode-selector{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;padding:.5rem;}
-.mode-selector button{background:var(--accent);border:none;border-radius:.25rem;padding:.5rem 1rem;cursor:pointer;color:#fff;}
-.container{display:flex;flex-grow:1;}
-#hud{display:flex;flex-direction:column;gap:.5rem;padding:.5rem;width:100px;}
-#xpBar{height:.5rem;background:#ccc;width:100%;border-radius:.25rem;overflow:hidden;}
-#xpBar span{display:block;height:100%;background:var(--accent);width:0%;transition:width .3s;}
-main{display:flex;flex-direction:column;align-items:center;justify-content:center;flex-grow:1;gap:.5rem;padding:1rem;}
-#flashcard{font-size:clamp(1.5rem,5vw,2.5rem);padding:1rem 2rem;border:2px solid var(--accent);border-radius:.5rem;min-width:150px;text-align:center;}
-#choices{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
-#choices button{background:var(--accent);color:#fff;border:none;border-radius:.25rem;padding:.5rem 1rem;cursor:pointer;}
-#toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--accent);color:var(--bg);padding:.5rem 1rem;border-radius:.5rem;opacity:0;pointer-events:none;}
-#toast.show{animation:toast-in .3s forwards,toast-out .3s forwards 2s;}
-@keyframes toast-in{from{opacity:0;transform:translate(-50%,100%);}to{opacity:1;transform:translate(-50%,0);}}
-@keyframes toast-out{to{opacity:0;transform:translate(-50%,100%);}}
-#confetti{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;}
-.particle{position:absolute;animation:fall linear forwards;}
-@keyframes fall{to{transform:translateY(100vh) rotate(360deg);opacity:0;}}
-#trophyModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
-#trophyModal[hidden]{display:none;}
-#avatarModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
-#avatarModal[hidden]{display:none;}
-#leaderboardModal,#lessonModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.6);display:flex;justify-content:center;align-items:center;}
-#leaderboardModal[hidden],#lessonModal[hidden]{display:none;}
-.modal-content{background:var(--bg);color:var(--fg);padding:1rem;border-radius:.5rem;width:90%;max-width:300px;text-align:center;}
-.modal-content ul{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
-.modal-content li{background:var(--accent);color:var(--bg);padding:.25rem .5rem;border-radius:.25rem;}
-#leaderboard{list-style:none;padding:0;}
-#leaderboard li{background:var(--accent);color:var(--bg);margin:.25rem 0;padding:.25rem .5rem;border-radius:.25rem;}
-#avatarModal button{font-size:2rem;background:none;border:none;cursor:pointer;}
-#lessonList{display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;}
-#lessonList button.done{opacity:.5;}
-footer{text-align:center;padding:.5rem;}
-</style>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "EducationalApplication",
-  "name": "Times-Table Quest",
-  "applicationCategory": "GameApplication",
-  "applicationSubCategory": "Educational",
-  "operatingSystem": "Browser",
-  "url": "https://example.com/",
-  "description": "A free interactive multiplication game for primary school children."
-}
-</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromoAI Logo Design</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .logo-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .logo-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s ease;
+        }
+        .logo-card:hover {
+            transform: translateY(-5px);
+        }
+        .logo-preview {
+            width: 200px;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+        }
+        .color-options {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+        .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .selected-logo {
+            border: 3px solid #4f46e5;
+        }
+        .vote-button {
+            margin-top: 1rem;
+            padding: 0.5rem 1.5rem;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .vote-button:hover {
+            background: #3730a3;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <h1>Times-Table Quest</h1>
-  <span id="avatarDisplay" class="avatar" aria-label="Player avatar" tabindex="0"></span>
-  <button id="contrastToggle" role="switch" aria-checked="false">HC</button>
-</header>
-<nav class="mode-selector">
-  <button data-mode="explore">Explore</button>
-  <button data-mode="sequence">Sequence Drill</button>
-  <button data-mode="mixed">Mixed Drill</button>
-  <button data-mode="choice">Multiple Choice</button>
-  <button data-mode="speed">Speed Test</button>
-  <button id="lessonBtn">Lessons</button>
-</nav>
-<div class="container">
-  <aside id="hud">
-    <div id="xpBar"><span></span></div>
-    <div id="xpText" role="status">XP: 0</div>
-    <div id="streak" role="status">Streak: 0</div>
-    <div id="timer" role="status"></div>
-  </aside>
-  <main id="game">
-    <div id="flashcard" tabindex="0"></div>
-    <div id="choices" hidden></div>
-    <input id="answer" type="number" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="Your answer">
-    <button id="submit">Submit</button>
-  </main>
-</div>
-<footer>
-  <button id="trophyBtn">Trophies</button>
-  <button id="boardBtn">Leaderboard</button>
-  <button id="avatarBtn">Avatar</button>
-</footer>
-<div id="trophyModal" hidden>
-  <div class="modal-content">
-    <h2>Your Trophies</h2>
-    <ul id="trophies"></ul>
-    <button id="closeTrophies">Close</button>
-  </div>
-</div>
-<div id="avatarModal" hidden>
-  <div class="modal-content">
-    <h2>Select Avatar</h2>
-    <div id="avatarOptions"></div>
-    <button id="closeAvatar">Close</button>
-  </div>
-</div>
-<div id="leaderboardModal" hidden>
-  <div class="modal-content">
-    <h2>Leaderboard</h2>
-    <ol id="leaderboard"></ol>
-    <button id="closeBoard">Close</button>
-  </div>
-</div>
-<div id="lessonModal" hidden>
-  <div class="modal-content">
-    <h2>Lessons</h2>
-    <div id="lessonList"></div>
-    <button id="closeLessons">Close</button>
-  </div>
-</div>
-<div id="toast" aria-live="polite"></div>
-<div id="confetti"></div>
-<audio id="snd-correct" src="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAoA8AAKAPAAABAAgAZGF0YZABAAAAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KEAHwulapKcuGC8Xg9n589ePGC4XJKqpUufACE0mtWto4ffg+Iw2Fhw4gPfh+OtlZr0oQAfC6Vqkpy4YLxeD2fnz148YLhckqqlS58AITSa1a2jh9+D4jDYWHDiA9+H462VmvShAB8LpWqSnLhgvF4PZ+fPXjxguFySqqVLnwAhNJrVraOH34PiMNhYcOID34fjrZWa9KE=" preload="auto"></audio>
-<audio id="snd-wrong" src="data:audio/wav;base64,UklGRrQBAABXQVZFZm10IBAAAAABAAEAoA8AAKAPAAABAAgAZGF0YZABAAAAPm1+b0IDxZWCj7v5N2l+ckkLzJqCjLTxMGR9dk8T1J+Dia7pKV98eFUb26SFh6jhIVl6e1sj46qHhaPZGVN4fGAr67CKg53SEU11fWUy87aNgpnKCUdyfmo5+7yQgpTDAUBuf25AAcOUgpC8+zlqfnJHCcqZgo228zJlfXVNEdKdg4qw6ytgfHhTGdmjhYeq4yNbe3pZIeGoh4Wk2xtVeHxfKemuiYOf1BNPdn1kMPG0jIKazAtJcn5pN/m7j4KVxQNDb35tPgDCk4KRvv07a35xRQfJl4KOt/U0Zn50TA/QnIOKse0sYX13UhfXoYSIq+UlXHt5WB/fp4aFpd0dVnl7XSfnrYiEoNUVUHZ9Yy7vs4uDm84NSnN+Zzb3uY6ClscFRHB+bD3/wJKBksD/PWx+cEQFx5aCjrn3Nmd+c0oNzpuDi7PvLmN9dlAV1aCEiK3nJ117eVYd3aWFhqffH1h5e1wl5auIhKHXF1J3fWEs7bGKg5zQD0x0fmY09beOgpfJB0Vxfms7/b6RgpPC" preload="auto"></audio>
-<script type="module">
-(()=>{
-  'use strict';
-  const MAX_FACTOR=12,STREAK_BONUS=5,MAX_HISTORY=5,MAX_XP=5000,SPEED_TIME=60,CONFETTI_COUNT=30,STORAGE_KEY='ttq-state',BOARD_KEY='ttq-board';
-  const state={xp:0,streak:0,trophies:[],theme:'default',avatar:'\uD83D\uDE42',modules:{},}; // 🙂
-  const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
-  const rand=(min,max)=>Math.floor(Math.random()*(max-min+1))+min;
-  const saveState=()=>localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
-  const loadState=()=>{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');Object.assign(state,s);state.modules=state.modules||{};};
-  const flashcard=document.getElementById('flashcard');
-  const answer=document.getElementById('answer');
-  const submit=document.getElementById('submit');
-  const xpText=document.getElementById('xpText');
-  const xpBar=document.querySelector('#xpBar span');
-  const streakEl=document.getElementById('streak');
-  const timerEl=document.getElementById('timer');
-  const toastEl=document.getElementById('toast');
-  const confettiBox=document.getElementById('confetti');
-  const trophyBtn=document.getElementById('trophyBtn');
-  const trophyModal=document.getElementById('trophyModal');
-  const trophiesList=document.getElementById('trophies');
-  const closeTrophies=document.getElementById('closeTrophies');
-  const avatarDisplay=document.getElementById('avatarDisplay');
-  const avatarBtn=document.getElementById('avatarBtn');
-  const avatarModal=document.getElementById('avatarModal');
-  const avatarOptions=document.getElementById('avatarOptions');
-  const closeAvatar=document.getElementById('closeAvatar');
-  const boardBtn=document.getElementById('boardBtn');
-  const boardModal=document.getElementById('leaderboardModal');
-  const boardList=document.getElementById('leaderboard');
-  const closeBoard=document.getElementById('closeBoard');
-  const lessonBtn=document.getElementById('lessonBtn');
-  const lessonModal=document.getElementById('lessonModal');
-  const lessonList=document.getElementById('lessonList');
-  const closeLessons=document.getElementById('closeLessons');
-  const contrastToggle=document.getElementById('contrastToggle');
-  const choicesEl=document.getElementById('choices');
-  const modes=document.querySelectorAll('.mode-selector button');
-  const sndCorrect=document.getElementById('snd-correct');
-  const sndWrong=document.getElementById('snd-wrong');
-  let history=[],mode='explore',seqFactor=2,seqIndex=1,exploreIndex=0,currentQ=[1,1],timerId=0,startXP=0;
-  const renderAvatar=()=>{avatarDisplay.textContent=state.avatar;};
-  const buildAvatars=()=>{
-    const choices=['\uD83D\uDE42','\uD83D\uDE0E','\uD83E\uDD13','\uD83E\uDD20','\uD83D\uDC7D','\uD83D\uDC31'];
-    avatarOptions.innerHTML='';
-    choices.forEach(em=>{
-      const b=document.createElement('button');
-      b.textContent=em;
-      b.addEventListener('click',()=>{state.avatar=em;renderAvatar();saveState();avatarModal.hidden=true;});
-      avatarOptions.appendChild(b);
-    });
-  };
-  const updateHud=()=>{xpText.textContent=`XP: ${state.xp}`;xpBar.style.width=`${state.xp%100}%`;streakEl.textContent=`Streak: ${state.streak}`;};
-  const showToast=msg=>{if(matchMedia('(prefers-reduced-motion: reduce)').matches){toastEl.textContent=msg;toastEl.style.opacity=1;setTimeout(()=>toastEl.style.opacity=0,2000);}else{toastEl.textContent=msg;toastEl.className='show';setTimeout(()=>toastEl.className='',2300);}};
-  const showConfetti=()=>{confettiBox.innerHTML='';const emojis=['🎉','✨','🍀'];for(let i=0;i<CONFETTI_COUNT;i++){const s=document.createElement('span');s.className='particle';s.textContent=emojis[i%emojis.length];s.style.left=Math.random()*100+'%';s.style.animationDuration=2+Math.random()+'s';confettiBox.appendChild(s);}setTimeout(()=>confettiBox.innerHTML='',3000);};
-  const rebuildTrophies=()=>{trophiesList.innerHTML='';state.trophies.sort((a,b)=>a.time-b.time).forEach(t=>{const li=document.createElement('li');li.textContent=`${t.icon} ${t.name}`;trophiesList.appendChild(li);});};
-  const addTrophy=(name,icon)=>{if(!state.trophies.some(t=>t.name===name)){state.trophies.push({name,icon,time:Date.now()});rebuildTrophies();saveState();}};
-  const loadBoard=()=>JSON.parse(localStorage.getItem(BOARD_KEY)||'[]');
-  const saveBoard=b=>localStorage.setItem(BOARD_KEY,JSON.stringify(b));
-  const buildBoard=()=>{const b=loadBoard();boardList.innerHTML='';b.forEach((r,i)=>{const li=document.createElement('li');li.textContent=`${i+1}. ${r.name} - ${r.score}`;boardList.appendChild(li);});};
-  const updateBoard=score=>{let b=loadBoard();b.push({name:state.avatar,score});b.sort((a,c)=>c.score-a.score);b=b.slice(0,10);saveBoard(b);};
-  const buildLessons=()=>{lessonList.innerHTML='';for(let f=2;f<=MAX_FACTOR;f++){const b=document.createElement('button');b.textContent=`×${f}`;if(state.modules[f])b.classList.add('done');b.addEventListener('click',()=>startLesson(f));lessonList.appendChild(b);}};
-  const startLesson=f=>{lessonModal.hidden=true;mode='lesson';seqFactor=f;seqIndex=1;history=[];nextSequence();};
-  const endLesson=()=>{state.modules[seqFactor]=true;addTrophy(`Master ×${seqFactor}`,'🏅');saveState();buildLessons();startMode('explore');};
-  const uniqueRandom=()=>{let q;do{q=[rand(1,MAX_FACTOR),rand(1,MAX_FACTOR)];}while(history.some(p=>p.includes(q[0])&&p.includes(q[1])));history.push(q);if(history.length>MAX_HISTORY)history.shift();return q;};
-  const stopTimer=()=>{clearInterval(timerId);timerId=0;timerEl.textContent='';};
-  const startTimer=sec=>{timerEl.textContent=`${sec}s`;timerId=setInterval(()=>{sec--;timerEl.textContent=`${sec}s`;if(sec<=0){stopTimer();endSpeedTest();}},1000);};
-  const endSpeedTest=()=>{const gained=state.xp-startXP;showToast(`Time! +${gained} XP`);updateBoard(gained);buildBoard();addTrophy('Speedster','⚡');startMode('speed');};
-  const nextExplore=()=>{const a=Math.floor(exploreIndex/MAX_FACTOR)+1,b=exploreIndex%MAX_FACTOR+1;flashcard.textContent=`${a} × ${b} = ${a*b}`;exploreIndex=(exploreIndex+1)%(MAX_FACTOR*MAX_FACTOR);};
-  const nextSequence=()=>{if(seqIndex>MAX_FACTOR){if(mode==='lesson'){endLesson();return;}seqIndex=1;}currentQ=[seqFactor,seqIndex];flashcard.textContent=`${seqFactor} × ${seqIndex} = ?`;seqIndex++;answer.focus();};
-  const nextRandom=()=>{currentQ=uniqueRandom();flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;answer.focus();};
-  const nextChoice=()=>{currentQ=uniqueRandom();const correct=currentQ[0]*currentQ[1];flashcard.textContent=`${currentQ[0]} × ${currentQ[1]} = ?`;const set=new Set([correct]);while(set.size<4)set.add(rand(1,MAX_FACTOR)*rand(1,MAX_FACTOR));const opts=[...set].sort(()=>Math.random()-0.5);choicesEl.innerHTML='';opts.forEach(v=>{const b=document.createElement('button');b.textContent=v;b.addEventListener('click',()=>checkAnswer(v));choicesEl.appendChild(b);});};
-  const checkAnswer=v=>{const correct=currentQ[0]*currentQ[1];if(v===correct){sndCorrect.currentTime=0;sndCorrect.play();state.streak++;let add=10;if(state.streak%STREAK_BONUS===0){add+=STREAK_BONUS;showConfetti();}state.xp=clamp(state.xp+add,0,MAX_XP);showToast('Correct!');}else{sndWrong.currentTime=0;sndWrong.play();state.streak=0;showToast('Try again');}saveState();updateHud();if(mode==='sequence'||mode==='lesson')nextSequence();else if(mode==='mixed'||mode==='speed')nextRandom();else if(mode==='choice')nextChoice();};
-  const handleSubmit=()=>{const v=Number(answer.value);if(Number.isNaN(v)){showToast('Please enter a number');return;}answer.value='';checkAnswer(v);};
-  const startMode=m=>{stopTimer();mode=m;history=[];answer.value='';answer.disabled=false;submit.disabled=false;choicesEl.hidden=true;if(mode==='explore'){answer.disabled=true;submit.disabled=true;nextExplore();}else if(mode==='sequence'){seqFactor=clamp(parseInt(prompt('Choose a factor 2–12')||'2',10),2,MAX_FACTOR);seqIndex=1;nextSequence();}else if(mode==='mixed'){nextRandom();}else if(mode==='choice'){answer.disabled=true;submit.disabled=true;choicesEl.hidden=false;nextChoice();}else if(mode==='speed'){startXP=state.xp;startTimer(SPEED_TIME);nextRandom();}};
-  const applyTheme=h=>{document.documentElement.classList.toggle('high-contrast',h);contrastToggle.setAttribute('aria-checked',h);state.theme=h?'high':'default';saveState();};
-  loadState();applyTheme(state.theme==='high');updateHud();rebuildTrophies();renderAvatar();buildBoard();buildLessons();startMode('explore');
-  modes.forEach(b=>b.addEventListener('click',()=>startMode(b.dataset.mode)));
-  contrastToggle.addEventListener('click',()=>applyTheme(!document.documentElement.classList.contains('high-contrast')));
-  answer.addEventListener('keydown',e=>{if(e.key==='Enter')handleSubmit();if(!/\d/.test(e.key)&&e.key.length===1)e.preventDefault();});
-  submit.addEventListener('click',handleSubmit);
-  trophyBtn.addEventListener('click',()=>trophyModal.hidden=false);
-  closeTrophies.addEventListener('click',()=>trophyModal.hidden=true);
-  avatarBtn.addEventListener('click',()=>{buildAvatars();avatarModal.hidden=false;});
-  closeAvatar.addEventListener('click',()=>avatarModal.hidden=true);
-  boardBtn.addEventListener('click',()=>{buildBoard();boardModal.hidden=false;});
-  closeBoard.addEventListener('click',()=>boardModal.hidden=true);
-  lessonBtn.addEventListener('click',()=>{buildLessons();lessonModal.hidden=false;});
-  closeLessons.addEventListener('click',()=>lessonModal.hidden=true);
-  document.addEventListener('keydown',e=>{if(mode==='explore'){if(e.key==='ArrowRight')nextExplore();if(e.key==='ArrowLeft')exploreIndex=(exploreIndex+MAX_FACTOR*MAX_FACTOR-2)%(MAX_FACTOR*MAX_FACTOR);}});
-})();
-</script>
+    <div class="logo-container">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">PromoAI Logo Concepts</h1>
+        <p class="text-gray-600 mb-8 text-center max-w-2xl">Select your favorite logo design for our AI-powered branding platform</p>
+        
+        <div class="logo-options">
+            <!-- Logo Option 1 -->
+            <div class="logo-card">
+                <h2 class="text-xl font-semibold mb-4">Concept 1: Neural Brand</h2>
+                <div class="logo-preview">
+                    <svg width="150" height="150" viewBox="0 0 150 150">
+                        <defs>
+                            <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#4f46e5" />
+                                <stop offset="100%" stop-color="#7c3aed" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="75" cy="75" r="60" fill="url(#grad1)" />
+                        <path d="M55,60 Q75,40 95,60 T135,60" stroke="white" stroke-width="3" fill="none" />
+                        <path d="M55,75 Q75,55 95,75 T135,75" stroke="white" stroke-width="3" fill="none" />
+                        <path d="M55,90 Q75,70 95,90 T135,90" stroke="white" stroke-width="3" fill="none" />
+                        <circle cx="45" cy="60" r="5" fill="white" />
+                        <circle cx="45" cy="75" r="5" fill="white" />
+                        <circle cx="45" cy="90" r="5" fill="white" />
+                        <text x="75" y="120" text-anchor="middle" fill="white" font-size="16" font-weight="bold">PromoAI</text>
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-center">Represents the connection between AI neural networks and branding</p>
+                <div class="color-options">
+                    <div class="color-option" style="background-color: #4f46e5;"></div>
+                    <div class="color-option" style="background-color: #059669;"></div>
+                    <div class="color-option" style="background-color: #dc2626;"></div>
+                    <div class="color-option" style="background-color: #7c3aed;"></div>
+                </div>
+                <button class="vote-button">Select This Logo</button>
+            </div>
+            
+            <!-- Logo Option 2 -->
+            <div class="logo-card">
+                <h2 class="text-xl font-semibold mb-4">Concept 2: Smart Pixel</h2>
+                <div class="logo-preview">
+                    <svg width="150" height="150" viewBox="0 0 150 150">
+                        <defs>
+                            <linearGradient id="grad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#059669" />
+                                <stop offset="100%" stop-color="#10b981" />
+                            </linearGradient>
+                        </defs>
+                        <rect x="45" y="45" width="60" height="60" rx="10" fill="url(#grad2)" />
+                        <circle cx="60" cy="60" r="5" fill="white" />
+                        <circle cx="75" cy="60" r="5" fill="white" />
+                        <circle cx="90" cy="60" r="5" fill="white" />
+                        <circle cx="60" cy="75" r="5" fill="white" />
+                        <circle cx="75" cy="75" r="8" fill="white" />
+                        <circle cx="90" cy="75" r="5" fill="white" />
+                        <circle cx="60" cy="90" r="5" fill="white" />
+                        <circle cx="75" cy="90" r="5" fill="white" />
+                        <circle cx="90" cy="90" r="5" fill="white" />
+                        <text x="75" y="120" text-anchor="middle" fill="#059669" font-size="16" font-weight="bold">PromoAI</text>
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-center">Symbolizes the digital transformation of branding through AI technology</p>
+                <div class="color-options">
+                    <div class="color-option" style="background-color: #4f46e5;"></div>
+                    <div class="color-option" style="background-color: #059669;"></div>
+                    <div class="color-option" style="background-color: #dc2626;"></div>
+                    <div class="color-option" style="background-color: #7c3aed;"></div>
+                </div>
+                <button class="vote-button">Select This Logo</button>
+            </div>
+            
+            <!-- Logo Option 3 -->
+            <div class="logo-card">
+                <h2 class="text-xl font-semibold mb-4">Concept 3: Brand Fusion</h2>
+                <div class="logo-preview">
+                    <svg width="150" height="150" viewBox="0 0 150 150">
+                        <defs>
+                            <linearGradient id="grad3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#dc2626" />
+                                <stop offset="100%" stop-color="#ea580c" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M75,30 L90,60 L120,60 L100,80 L110,110 L75,95 L40,110 L50,80 L30,60 L60,60 Z" fill="url(#grad3)" />
+                        <circle cx="75" cy="65" r="15" fill="white" />
+                        <path d="M70,60 L75,70 L85,55" stroke="url(#grad3)" stroke-width="3" fill="none" />
+                        <text x="75" y="120" text-anchor="middle" fill="#dc2626" font-size="16" font-weight="bold">PromoAI</text>
+                    </svg>
+                </div>
+                <p class="text-gray-600 text-center">Represents the fusion of AI intelligence with brand identity creation</p>
+                <div class="color-options">
+                    <div class="color-option" style="background-color: #4f46e5;"></div>
+                    <div class="color-option" style="background-color: #059669;"></div>
+                    <div class="color-option" style="background-color: #dc2626;"></div>
+                    <div class="color-option" style="background-color: #7c3aed;"></div>
+                </div>
+                <button class="vote-button">Select This Logo</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const voteButtons = document.querySelectorAll('.vote-button');
+            
+            voteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove any existing selections
+                    voteButtons.forEach(btn => {
+                        btn.textContent = 'Select This Logo';
+                        btn.parentElement.classList.remove('selected-logo');
+                    });
+                    
+                    // Mark this as selected
+                    this.textContent = 'Selected ✓';
+                    this.parentElement.classList.add('selected-logo');
+                    
+                    // Alert the selection (in a real scenario, this would save the preference)
+                    const logoName = this.parentElement.querySelector('h2').textContent;
+                    alert(`You've selected ${logoName}. This preference would be saved in a real application.`);
+                });
+            });
+            
+            // Color option functionality
+            const colorOptions = document.querySelectorAll('.color-option');
+            colorOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const color = this.style.backgroundColor;
+                    const logoCard = this.closest('.logo-card');
+                    const svg = logoCard.querySelector('svg');
+                    
+                    // Change the main gradient color
+                    const gradient = svg.querySelector('linearGradient');
+                    const stops = gradient.querySelectorAll('stop');
+                    
+                    // Lighten color for the gradient
+                    const rgb = color.match(/\d+/g);
+                    const r = parseInt(rgb[0]);
+                    const g = parseInt(rgb[1]);
+                    const b = parseInt(rgb[2]);
+                    
+                    // Set gradient stops
+                    stops[0].setAttribute('stop-color', color);
+                    stops[1].setAttribute('stop-color', `rgb(${Math.min(r+40, 255)}, ${Math.min(g+40, 255)}, ${Math.min(b+40, 255)})`);
+                    
+                    // Change text color if needed
+                    const text = svg.querySelector('text');
+                    if (text) {
+                        text.setAttribute('fill', color);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

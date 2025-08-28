@@ -1,11 +1,12 @@
-# Times-Table Quest
+# PromoAI Logo Concepts
 
-This simple web game helps children practice multiplication tables.
+This project showcases three potential logo designs for PromoAI, an AI-powered branding platform. Users can preview each concept, try different accent colors, and select their favorite design.
 
 ## Features
 
-- Multiple practice modes
-- Trophy cabinet with achievements
-- Avatar selection
-- Leaderboard stored locally
-- Lesson modules for each times table
+- Three unique SVG logo concepts
+- Interactive color customization
+- Simple selection interaction using vanilla JavaScript
+- Styled with Tailwind CSS and custom gradients
+
+Open `index.html` in a browser to explore the designs.
